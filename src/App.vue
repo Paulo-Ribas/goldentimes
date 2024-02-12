@@ -1,30 +1,60 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
   <router-view/>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+@import './assets/scss/variables.scss';
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  &::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 8px;
+    background-color: #191918;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-image: $default-gradient;
+    border-radius: 8px;
   }
 }
+#app {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #111;
+  background-image: url('./assets/imgs/background.png');
+}
+.container {
+  width: 100%;
+  height: 100vh;
+  max-width: 1345px;
+  margin: 0px auto;
+}
+.profile-error {
+  color: $gold;
+  font-family: $main-font;
+  font-size: 0.8rem;
+  padding-left: 5px;
+}
+.category-error {
+  color: $gold;
+  font-family: $main-font;
+  font-size: 1rem;
+  padding-left: 5px;
+}
+.error {
+  text-align: center;
+  color: $gold;
+  font-family: $main-font;
+  font-size: 1rem;
+}
+
+@media screen and (max-width: 860px) {
+    html {
+      font-size: 14px;
+    }
+}
+
+
 </style>
