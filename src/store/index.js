@@ -42,14 +42,20 @@ export default createStore({
           let {name, email, password} = payload
           return new Promise((resolve, reject) => {
             axios.post(url + 'user', {name,email,password}).then(data => resolve(data))
-            .catch(error =>  reject(error.response.err))
+            .catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error) 
+            })
           })
         },
         async login(context, payload){
           let  {email, password} = payload
           return new Promise((resolve, reject) => {
             axios.post(url + 'login', {email,password}).then(data => resolve(data))
-            .catch(error =>  reject(error))
+            .catch(err => { 
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
+            })
           })
         },
         async validateUser(context, payload){
@@ -62,8 +68,8 @@ export default createStore({
               context.commit('SET_USER', response.data.user)
               return resolve()
             }).catch(err => {
-              console.log(err, 'o erro')
-              return reject(err.response.data)
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
             })
           })
         },
@@ -78,7 +84,8 @@ export default createStore({
               return resolve(token)
             }).catch(err => {
               console.log(err, 'o erro')
-              return reject(err.response.data)
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
             })
           })
         },
@@ -93,7 +100,8 @@ export default createStore({
               return resolve(response.data.token)
             }).catch(err => {
               console.log(err, 'erro')
-              return reject(err.response.data)
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
             })
           })
         },
@@ -107,10 +115,22 @@ export default createStore({
                 let token = response.data.token
                 return resolve(token)
               }).catch(err => {
-                console.log(err, 'o erro')
-                return reject(err.response.data)
+                let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+                return reject(error)
               })
             })
+        },
+        async getUser(context, payload){
+          let ID = payload
+          return new Promise((resolve, reject) => {
+            axios.get(`${url}user/${ID}`).then(res => {
+              resolve(res.data.user)
+            })
+            .catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
+            })
+          })
         }
       },
     },
@@ -141,9 +161,9 @@ export default createStore({
               let locations = response.data.currentLocations
               context.commit('SET_LOCATIONS', locations)
               resolve()
-            }).catch(error => {
-              console.log('o erro', error)
-              reject(error.response.data)
+            }).catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
             })
           })
         },
@@ -157,9 +177,9 @@ export default createStore({
               console.log('vou salvar isso aqui', locations)
               context.commit('SET_LOCATIONS', locations)
               resolve()
-            }).catch(error => {
-              console.log('o erro', error)
-              reject(error.response.data)
+            }).catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
             })
           })
         },
@@ -173,9 +193,9 @@ export default createStore({
               console.log('vou salvar isso aqui', locations)
               context.commit('SET_LOCATIONS', locations)
               resolve()
-            }).catch(error => {
-              console.log('o erro', error)
-              reject(error.response.data)
+            }).catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
             })
           })
         },
@@ -190,9 +210,9 @@ export default createStore({
               console.log('vou setar isso aqui', locations)
               context.commit('SET_LOCATIONS', locations)
               resolve()
-            }).catch(error => {
-              console.log('o erro', error)
-              reject(error.response.data)
+            }).catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
             })
           })
         },
@@ -206,9 +226,9 @@ export default createStore({
               let locations = response.data.currentLocations
               context.commit('SET_LOCATIONS', locations)
               resolve()
-            }).catch(error => {
-              console.log('o erro', error)
-              reject(error.response.data)
+            }).catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
             })
           })
         }
@@ -236,6 +256,19 @@ export default createStore({
 
       },
       actions: {
+        async checkGroup(context, payload){
+          const {token, groupID} = payload,
+          axiosHeader = {headers:{authorization: token}}
+          
+          return new Promise((resolve, reject) => {
+            axios.post(`${url}checkgroup/${groupID}`, {}, axiosHeader).then(response => {
+              resolve(response.data)
+            }).catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
+            })
+          })
+        },
         async saveGroup(context, payload) {
         let Leader = context.rootState.user.ID, GroupName = payload,
 
@@ -247,8 +280,8 @@ export default createStore({
           .then(response => {
             resolve(response.data.groups)
           }).catch(err => {
-            console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -263,8 +296,8 @@ export default createStore({
             console.log(response)
             resolve(response.data.groupUpdated)
           }).catch(err => {
-            console.log(err, 'errou')
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
           
         })
@@ -280,7 +313,8 @@ export default createStore({
             resolve(response.data.groupID)
           }).catch(err => {
             console.log(err, 'errou')
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
           
         })
@@ -295,7 +329,8 @@ export default createStore({
             resolve(response.data.deletedGroup)
           }).catch(err => {
             console.log(err, 'errou')
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
           
         })
@@ -310,7 +345,8 @@ export default createStore({
             resolve(response.data.group)
           }).catch(err => {
             console.log(err)
-            reject(err)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -324,11 +360,58 @@ export default createStore({
             resolve(response.data.groups)
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
-      
+      async giveMemberAdmin(context, payload){
+        let token = context.rootState.user.Token,
+        {groupID, memberID} = payload,
+        axiosHeader = {headers:{authorization: token}}
+        return new Promise((resolve, reject) => {
+          axios.put(`${url}admin/${groupID}`,{memberID}, axiosHeader).then(response => {
+            console.log(response.data.Admins, 'os ADMINS')
+            resolve(response.data.Admins)
+          }).catch(err => {
+            console.log(err)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
+          })
+        })
+      },
+      async removeMemberAdmin(context, payload){
+        let token = context.rootState.user.Token,
+        {groupID, memberID} = payload,
+        headers = {authorization: token}
+        
+        return new Promise((resolve, reject) => {
+          axios.delete(`${url}admin/${groupID}`,{data:{memberID}, headers}).then(response => {
+            console.log(response.data.Admins, 'Oadmins')
+            resolve(response.data.Admins)
+          }).catch(err => {
+            console.log(err)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
+          })
+        })
+      },
+      async kickMember(context, payload) {
+        let token = context.rootState.user.Token,
+        {groupID, memberID} = payload,
+        headers = {authorization: token}
+        
+        return new Promise((resolve, reject) => {
+          axios.delete(`${url}member/${groupID}`,{data:{memberID}, headers}).then(response => {
+            console.log(response.data.groupAtt, 'o grupo')
+            resolve(response.data.groupAtt)
+          }).catch(err => {
+            console.log(err)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
+          })
+        })
+      }
     },
   },
   categories: {
@@ -355,7 +438,8 @@ export default createStore({
             resolve(response.data.category)
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -368,7 +452,8 @@ export default createStore({
             resolve(response.data.categories)
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -382,7 +467,8 @@ export default createStore({
             resolve(response.data.category)
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -397,7 +483,8 @@ export default createStore({
             resolve(response.data.category)
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -412,7 +499,8 @@ export default createStore({
             resolve(response.data.deleted)
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -429,7 +517,8 @@ export default createStore({
             resolve(currentSavedLocations)
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -445,7 +534,8 @@ export default createStore({
             resolve({currentSavedLocations})
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -461,7 +551,8 @@ export default createStore({
             let {currentBlackListLocation} =  response.data
             resolve(currentBlackListLocation)
           }).catch(err => {
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -477,7 +568,8 @@ export default createStore({
             context.commit('SET_CURRENT_LOCATIONS_BLACK_LISTED', currentBlackListLocation)
             resolve({currentBlackListLocation})
           }).catch(err => {
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -497,7 +589,8 @@ export default createStore({
             resolve(response.data)
           }).catch(err => {
             console.log(err)
-            reject(err)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -512,7 +605,8 @@ export default createStore({
             resolve(response.data.invites)
           }).catch(err => {
             console.log(err)
-            reject(err)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -527,7 +621,8 @@ export default createStore({
             resolve(response.data.inviteID)
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       },
@@ -542,7 +637,8 @@ export default createStore({
             resolve(response.data.inviteID)
           }).catch(err => {
             console.log(err)
-            reject(err.response.data)
+            let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+            return reject(error)
           })
         })
       }

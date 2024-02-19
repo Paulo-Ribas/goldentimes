@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import validateUser from '@/middleware/validateUser'
+import CheckGroup from '@/middleware/CheckGroup'
 
 const routes = [
   {
@@ -7,11 +8,13 @@ const routes = [
     name: 'home',
     beforeEnter(to, from, next){
       if(localStorage.getItem('token')){
-        return next('/perfil')
+        return next('/profile')
       }
-      next('/sign-up')
+      next()
     },
+    component: () => import('../views/Home.vue')
   },
+
   {
     path: '/sign-up',
     name: 'signUp',
@@ -49,9 +52,14 @@ const routes = [
     ]
   },
   {
+    path: '/user/profile/:userId',
+    name: 'publicProfile',
+    component: () => import('../views/user/Profile.vue')
+  },
+  {
     path:'/group/:id',
     name: 'groups',
-    beforeEnter: validateUser,
+    beforeEnter: [validateUser, CheckGroup],
     component:() => import('../views/Group/GroupsView.vue'),
   },
   {
@@ -63,7 +71,7 @@ const routes = [
   {
     path:'/group/:groupID/category/:categoryID',
     name: 'GroupLocation',
-    beforeEnter: validateUser,
+    beforeEnter: [validateUser, CheckGroup],
     component:() => import('../views/Group/GroupPlaces.vue'),
     children: [
       {
@@ -82,6 +90,11 @@ const routes = [
         component:() => import('../views/Group/BlackListGroup/BlackList.vue')
       },
     ]
+  },
+  {
+    path:'/errorpage/:error',
+    name: 'PageError',
+    component:() => import('../views/ErrorPage/ErrorPage.vue')
   }
 ]
 

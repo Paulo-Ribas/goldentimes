@@ -1,5 +1,6 @@
 <template>
     <div class="content-container">
+      <span class="locations-errs">{{err}}</span>
       <form @submit.prevent="search()">
           <div class="search-container">
               <input type="search" placeholder="Search" name="search" id="search" autocomplete="off" v-model="text">
@@ -15,8 +16,16 @@
           </Transition>
       </form>
       <LoadingSmall v-if="!loaded"></LoadingSmall>
-      <div class="cards-container" v-if="loaded">
+      <div class="cards-container" v-if="loaded && !mobile">
           <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
+          :placesSavedProps="true"
+          @deleteCard="deleteUserCard($event)"
+          @addBlackListCard="addPlaceToBlackList($event)"
+          />
+      </div>
+
+      <div class="cards-container" v-if="loaded && mobile">
+          <LocationCardMobile v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
           :placesSavedProps="true"
           @deleteCard="deleteUserCard($event)"
           @addBlackListCard="addPlaceToBlackList($event)"
@@ -32,15 +41,29 @@
   import LocationCard from '@/components/LocationCard.vue'
   import { mapActions, mapMutations, mapState } from 'vuex'
 import LoadingSmall from '@/components/LoadingSmall.vue'
+import LocationCardMobile from '@/components/LocationCardMobile.vue'
   
   export default {
     /* eslint-disable */
+    head(){
+        return {
+            title: this.categoryName + ' Saved Places',
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'noindex'}
+            ], 
+        }
+    },
+    created(){
+      this.setResponsive()
+    },
       async mounted(){
         try {
           let category = await this.getCategory({categoryID: this.categoryID, groupID: this.groupID})
           let {BlackListLocations}= await this.getGroup(this.groupID)
           this.SET_CURRENT_LOCATIONS_BLACK_LISTED(BlackListLocations)
           this.SET_STATE(category)
+          this.categoryName  = category.Name
           this.isLocationSaved(this.locationStore.SavedLocations)
           console.log(this.locationStore.SavedLocations, 'locações salvas')
           this.isLocationBlackListed(this.locationStore.SavedLocations)
@@ -69,6 +92,8 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
               copySpecial: undefined,
               loaded: false,
               err: '',
+              categoryName: '',
+              mobile: false,
               
           }
       },
@@ -78,14 +103,21 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
       watch: {
         text(){
             this.search()
-        }
+        },
+        '$screen.width'(value){
+            this.setResponsive(value)
+        },
       },
-      components:{SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall},
+      components:{ SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall, LocationCardMobile },
       methods: {
           ...mapActions({saveLocation:'saveLocationInCategory', getCategory: 'getCategory', getGroup:'getGroup',
             deleteLocation: 'deleteLocationInCategory', addLocationToGroupBlackList: 'addLocationToGroupBlackList',
         }),
         ...mapMutations({SET_STATE: 'SET_CATEGORY_STATE', SET_CURRENT_LOCATIONS_BLACK_LISTED: 'SET_CURRENT_LOCATIONS_BLACK_LISTED'}),
+        setResponsive(value = this.$screen.width){
+            if(value <= 860) return this.mobile = true
+            this.mobile = false
+          },
           filterSelected(filter){
               let newFiltersList = this.filtersList.map(obj => {
                   if(obj.name === filter && obj.googleFilter){
@@ -224,8 +256,7 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
                   this.isLocationBlackListed(this.locations)
               }
               catch(error){
-                  console.log(error, ' o erro')
-                  this.err = error
+                  this.err = error.err
               }
           },
           async addPlaceToBlackList($event) {
@@ -239,8 +270,7 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
                 this.isLocationBlackListed(this.locations)
                 
               } catch (error) {
-                  if(!error.err) error.err = 'ocorreu um erro'
-                  this.error = error.err
+                  this.err = error.err
               }
 
           },
@@ -427,6 +457,19 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
           opacity: 0;
           transform: translate(-50%, 0%);
       }
+      @media screen and (max-width: 860px) {
+        .content-container {
+          width: 100%;
+          height: 81.5%;
+          border-radius: 40px;
+          margin-top: 10px;
+          background: #0E0E0D;
+          padding: 20px 20px 0px;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+      }
+    }
   
   </style>
   

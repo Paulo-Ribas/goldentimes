@@ -52,6 +52,15 @@ import Notifications from '@/components/Notifications.vue';
 import ProfileEditing from '@/components/ProfileEditing.vue';
 import Loanding from '@/components/Loading.vue';
 export default {
+    head(){
+        return {
+            title: 'Profile',
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'noindex'}
+            ], 
+        }
+    },
     async beforeMount(){
         try {
             this.setActivated(this.$route.name)
@@ -61,6 +70,7 @@ export default {
             this.loaded = true
         } catch (error) {
             console.log(error)
+            this.err = error.err
         }
 
     },
@@ -268,6 +278,75 @@ main {
 }
 .activated {
     color: #F5CB86;
+}
+@media screen and (max-width: 860px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+      gap: 0%;
+      height: 200vh;
+    }
+    aside {
+    width: 99%;
+    max-width: 333px;
+    height: 45%;
+    flex: unset;
+    .profile-container {
+        width: 100%;
+        height: calc(100% - 75px);
+        border-image: $default-gradient;
+        border-image-slice: 1;
+        border-width: 4px;
+        border-style: solid;
+        max-height: 470px;
+        margin-top: 20px;
+    }
+    .groups-container {
+        width: 100%;
+        display: flex;
+    }
+}
+main {
+    margin-top: 20px;
+    flex: unset;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    nav {
+        width: 99%;
+        max-width: 560px;
+        border-radius: 40px;
+        background: #0E0E0D;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        min-height: 49px;
+
+        a {
+            color: $text-color;
+            text-decoration: none;
+            &:hover {
+                color: #F5CB86;
+            }
+            display: inline-block;
+            position: relative;
+
+            span {
+                width: 100%;
+                background-color: #F5CB86;
+                height: 1px;
+                position: absolute;
+                bottom: 0;
+                transform: translateY(-100%)
+            }
+        }
+
+    }
+
+}
 }
 
 </style>

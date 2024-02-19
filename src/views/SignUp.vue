@@ -3,7 +3,7 @@
         <section id="signup">
             <div class="signup-container">
                 <form @submit.prevent="submit">
-                    {{err}}
+                   <span class="login-sign-errs"> {{err}}</span>
                     <h1>goldentimes</h1>
                     <div class="inputs">
                         <div class="name-email">
@@ -28,7 +28,7 @@
                             <label for="confirmPassword">Confirmar Senha</label>
                             <div class="input-container">
                                 <PassIcon></PassIcon>
-                                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="insira novamente sua senha">
+                                <input v-model="confirmPassword" id="confirmPassword" name="confirmPassword" type="password" placeholder="insira novamente sua senha">
                             </div>
                         </div>
                     </div> <!--fim .inputs-->
@@ -50,12 +50,22 @@ import UserIcon from '@/components/svgs/UserIcon.vue';
 import { mapActions, mapMutations } from 'vuex';
 export default {
     components: {Bar, EmailIcon, PassIcon, UserIcon},
+    head(){
+        return {
+            title: 'Sign Up',
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'noindex'}
+            ], 
+        }
+    },
     data(){
         return {
             name: '',
             email: '',
             password: '',
             err: '',
+            confirmPassword: '',
 
         }
     },
@@ -63,6 +73,7 @@ export default {
         ...mapActions({signup:'signup'}),
         ...mapMutations({SET_TOKEN:'SET_TOKEN'}),
         async submit(){
+            if(this.confirmPassword !== this.password) return this.err = 'as senhas não coincidem'
             try {
                 let response = await this.signup({name: this.name, email: this.email, password: this.password})
                 console.log(response)
@@ -70,9 +81,7 @@ export default {
                 this.$router.push('/profile')
                 
             } catch (error) {
-                console.log(error)
-                if(!error.response) return this.err = "ocorreu um erro no servidor"
-                this.err = error.response.data.err
+                this.err = error.err
             }
         }
     }

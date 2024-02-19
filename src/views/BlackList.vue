@@ -1,5 +1,6 @@
 <template>
     <div class="content-container">
+      <span class="locations-errs">{{err}}</span>
       <form @submit.prevent="search()">
           <div class="search-container">
               <input type="search" placeholder="Search" name="search" id="search" autocomplete="off" v-model="text">
@@ -14,10 +15,16 @@
               <Filters v-if="filters" :filtersProps="filtersList" @addFilter="filterSelected($event)"></Filters>
           </Transition>
       </form>
-      <LoadingSmall v-if="!loaded"></LoadingSmall>
+      <LoadingSmall v-if="!loaded && !mobile"></LoadingSmall>
       <div class="cards-container" v-if="loaded">
-            {{err}}
           <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
+          :placesSavedProps="false"
+          :placesBlackListedProps="true"
+          @removeBlackListCard="removeBlackListCard($event)"
+          />
+      </div>
+      <div class="cards-container" v-if="loaded && mobile">
+          <LocationCardMobile v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
           :placesSavedProps="false"
           :placesBlackListedProps="true"
           @removeBlackListCard="removeBlackListCard($event)"
@@ -33,9 +40,27 @@
   import LocationCard from '@/components/LocationCard.vue'
   import { mapActions, mapState } from 'vuex'
   import LoadingSmall from '@/components/LoadingSmall.vue'
+import LocationCardMobile from '@/components/LocationCardMobile.vue'
   
   export default {
     /* eslint-disable */
+    head(){
+        return {
+            title: 'Black List',
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'noindex'}
+            ], 
+        }
+    },
+    created(){
+        this.setResponsive()
+    },
+    watch: {
+    '$screen.width'(value){
+     this.setResponsive(value)
+    },
+  },
       async beforeMount(){
         try {
           await this.getUserLocations()
@@ -62,7 +87,8 @@
               locations: [],
               copySpecial: undefined,
               err: '',
-              loaded: false
+              loaded: false,
+              mobile: false,
               
           }
       },
@@ -70,16 +96,23 @@
           ...mapState({locationStore: state => state.locations})
       },
       watch: {
+        '$screen.width'(value){
+     this.setResponsive(value)
+    },
         text(){
             this.search()
         }
       },
-      components:{SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall},
+      components:{ SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall, LocationCardMobile },
       methods: {
           ...mapActions({saveLocation:'saveLocation', getUserLocations: 'getUserLocations',
           deleteLocation: 'deleteLocation', addLocationToBlackList: 'addLocationToBlackList',
           removeLocationFromBlackList: 'deleteLocationFromBlackList'
         }),
+        setResponsive(value = this.$screen.width){
+            if(value <= 860) return this.mobile = true
+            this.mobile = false
+      },
           filterSelected(filter){
               let newFiltersList = this.filtersList.map(obj => {
                   if(obj.name === filter && obj.googleFilter){
@@ -98,6 +131,7 @@
               this.toggleFilter()
           },
           async toggleFilter(){
+            try {
               let filtersSelecteds = this.filtersList.filter(filter => {
                   return filter.selected === true
               })
@@ -111,7 +145,12 @@
               let apiFiltersNamesTreated = Array.from(apiFiltersNames).map(filter => filter.apiFilter)
               this.apiFiltersSelecteds = apiFiltersNamesTreated
               this.googleFiltersSelecteds = googleFiltersTreated
+              
               await this.applyFilters()
+
+            } catch (error) {
+              this.err = error.err
+            }
           },
           async applyFilters(){
             let newPlaces = this.locationStore.BlackListLocations
@@ -217,7 +256,6 @@
                 this.isLocationBlackListed(this.locations)
                 
             } catch (error) {
-                if(!error.err) error.err = 'ocorreu um erro'
                 this.err = error.err
             }
           },
@@ -403,6 +441,19 @@
           opacity: 0;
           transform: translate(-50%, 0%);
       }
+      @media screen and (max-width: 860px) {
+        .content-container {
+          width: 100%;
+          height: 81.5%;
+          border-radius: 40px;
+          margin-top: 10px;
+          background: #0E0E0D;
+          padding: 20px 20px 0px;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+      }
+    }
   
   </style>
   

@@ -70,4 +70,9 @@ export default {
 
             }
         }
+    @media screen and (max-width: 860px) {
+        input {
+            width: 50vw;
+        }
+    }
 </style>

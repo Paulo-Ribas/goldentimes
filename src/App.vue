@@ -21,7 +21,7 @@
 #app {
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
   background-color: #111;
   background-image: url('./assets/imgs/background.png');
 }
@@ -49,10 +49,28 @@
   font-family: $main-font;
   font-size: 1rem;
 }
-
+.locations-errs{
+  text-align: center;
+  color: $gold;
+  font-family: $main-font;
+  font-size: 1rem;
+  margin-top: -12px;
+  margin-bottom: 6px;
+}
+.login-sign-errs{
+  text-align: center;
+  color: $gold;
+  font-family: $main-font;
+  font-size: 1rem;
+  margin-top: -12px;
+  margin-bottom: 6px;
+}
 @media screen and (max-width: 860px) {
     html {
       font-size: 14px;
+    }
+    #app {
+      overflow-y: auto;
     }
 }
 

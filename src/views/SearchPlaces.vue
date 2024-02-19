@@ -1,5 +1,6 @@
 <template>
   <div class="content-container">
+    <span class="locations-errs">{{err}}</span>
     <form @submit.prevent="search()">
         <div class="search-container">
             <input type="search" placeholder="Search" name="search" id="search" autocomplete="off" v-model="text">
@@ -15,8 +16,14 @@
         </Transition>
     </form>
     <LoadingSmall v-if="searching"></LoadingSmall>
-    <div class="cards-container" v-if="!searching">
+    <div class="cards-container" v-if="!searching && !mobile">
         <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
+        :placesSavedProps="false"
+        @saveCard="savePlace($event)"
+        />
+    </div>
+    <div class="cards-container" v-if="!searching && mobile">
+        <LocationCardMobile v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
         :placesSavedProps="false"
         @saveCard="savePlace($event)"
         />
@@ -32,8 +39,26 @@ import LocationCard from '@/components/LocationCard.vue'
 import axios from 'axios'
 import LoadingSmall from '@/components/LoadingSmall.vue'
 import { mapActions, mapState } from 'vuex'
+import LocationCardMobile from '@/components/LocationCardMobile.vue'
 
 export default {
+    head(){
+        return {
+            title: 'Search Places',
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'noindex'}
+            ], 
+        }
+    },
+    created(){
+        this.setResponsive()
+    },
+    watch: {
+    '$screen.width'(value){
+     this.setResponsive(value)
+    },
+  },
     async mounted(){
         await this.getUserLocations()
     },
@@ -53,14 +78,20 @@ export default {
             locations: [],
             copySpecial: undefined,
             searching: false,
+            err: '',
+            mobile: false,
         }
     },
     computed: {
         ...mapState({locationStore: state => state.locations})
     },
-    components:{SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall},
+    components:{ SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall, LocationCardMobile },
     methods: {
         ...mapActions({saveLocation:'saveLocation', getUserLocations: 'getUserLocations'}),
+         setResponsive(value = this.$screen.width){
+            if(value <= 860) return this.mobile = true
+            this.mobile = false
+      },
         filterSelected(filter){
             let newFiltersList = this.filtersList.map(obj => {
                 if(obj.name === filter && obj.googleFilter){
@@ -93,7 +124,8 @@ export default {
 
             this.googleFiltersSelecteds = googleFiltersTreated.join(',')
             this.apiFiltersSelecteds = apiFiltersNamesTreated.join(',')
-            console.log(apiFiltersNamesTreated, googleFiltersTreated)
+
+            this.search()
         },
         simulateSubmit(){
             document.querySelector('input[type="submit"]').click()
@@ -143,8 +175,7 @@ export default {
                 this.isLocationSaved(this.locations)
             }
             catch(error){
-                console.log(error, ' o erro')
-                this.err = error
+                this.err = error.err
             }
         }
     }
@@ -261,6 +292,19 @@ export default {
     .filters-leave-to {
         opacity: 0;
         transform: translate(-50%, 0%);
+    }
+    @media screen and (max-width: 860px) {
+        .content-container {
+        width: 100%;
+        height: 81.5%;
+        border-radius: 40px;
+        margin-top: 10px;
+        background: #0E0E0D;
+        padding: 20px 20px 0px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
     }
 
 </style>

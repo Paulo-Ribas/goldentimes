@@ -1,8 +1,9 @@
 <template>
-  <div class="btn-container" @click.prevent="" :class="{checkTop, checkRigth}" :style="{left: X, top: Y}">
-    <button>Kick Member</button>
-    <button v-if="owner">Give Adimin</button>
-    <button v-if="!owner">Remove Adimin</button>
+  <div class="btn-container" @click.prevent="" :style="{left: X, top: Y}">
+    <button @click="emitKickMember" v-if="!isOwner">Kick Member</button>
+    <button @click="emitGiveMemberAdmin" v-if="!isMemberAdmin && !isOwner">Give Admin</button>
+    <button @click="emitRemoveMemberAdmin" v-if="isMemberAdmin && !isOwner">Remove Admin</button>
+    <button v-if="isOwner">Owner</button>
   </div>
 </template>
 
@@ -11,14 +12,23 @@ export default {
     props: {
         Xprops: Number,
         Yprops: Number,
-        checkRigthProps: Boolean,
-        checkTopProps: Boolean,
-        ownerProps: Boolean,
+        mousePositionXProps: Number,
+        mousePositionYProps: Number,
+        isMemberAdminProps: Boolean,
+        isOwnerProps: Boolean,
+    },
+    beforeMount(){
+        let windowWidth = window.innerWidth, windowHeight = window.innerHeight
+        console.log(this.X, this.mousePositionY, windowHeight, (this.mousePositionY + 400))
+        if((this.mousePositionX + 200) >= windowWidth) this.X = (this.$props.Xprops - 200) + 'px'
+        if((this.mousePositionY + this.$props.Yprops) >= windowHeight) this.Y = (this.$props.Yprops - (this.$props.Yprops * 2)) + 'px'
+        console.log( '         ', this.X)
+
+
     },
     watch: {
         Xprops(value){
             this.X = value + 'px'
-            console.log(this.X)
         },
         Yprops(value){
             console.log(value, 'vou coisar')
@@ -29,11 +39,23 @@ export default {
         return {
             X: `${this.Xprops}px`,
             Y: `${this.Yprops}px`,
-            checkRigth: this.checkRigthProps,
-            checkTop: this.checkTopProps,
-            owner: this.ownerProps
+            isMemberAdmin: this.isMemberAdminProps,
+            isOwner: this.isOwnerProps,
+            mousePositionX: this.mousePositionXProps,
+            mousePositionY: this.mousePositionYProps
         }
     },
+    methods: {
+        emitKickMember(){
+            this.$emit('kickMember')
+        },
+        emitGiveMemberAdmin(){
+            this.$emit('giveMemberAdmin')
+        },
+        emitRemoveMemberAdmin(){
+            this.$emit('removeMemberAdmin')
+        },
+    }
 }
 </script>
 
@@ -47,6 +69,7 @@ export default {
         width: 20%;
         min-width: 200px;
         position: absolute;
+        z-index: 2;
         button {
             margin: 22px 0px;
             border: none;
@@ -56,6 +79,7 @@ export default {
             font-family: $main-font;
             padding-left: 10px;
             transition: 0.3s;
+            display: block;
             &:hover{
                 color: $gold;
             }

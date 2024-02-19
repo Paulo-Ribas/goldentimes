@@ -46,6 +46,7 @@ import LoadingMicro from './LoadingMicro.vue';
               err: '',
               firstImg: this.userProps.profileImg,
               saving: false,
+              imgChoiced: undefined,
   
           }
       },
@@ -81,7 +82,7 @@ import LoadingMicro from './LoadingMicro.vue';
                     token = await this.editUserName({name: this.newName})
                 } 
 
-                if(this.imgSrc !== this.firstImg){
+                if(this.imgSrc !== this.firstImg && this.imgChoiced){
                     token = await this.editImgProfile(this.imgChoiced)
                 } 
 

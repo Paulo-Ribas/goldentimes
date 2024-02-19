@@ -5,7 +5,7 @@
                 <form @submit.prevent="submit">
                     <div class="inputs">
                         <div class="name-email">
-                            {{ err }}
+                            <span class="login-sign-errs"> {{err}}</span>
                             <label for="email">Email</label>
                             <div class="input-container">
                                 <EmailIcon></EmailIcon>
@@ -40,6 +40,15 @@ import { mapActions, mapMutations } from 'vuex';
 export default {
     components: {EmailIcon, PassIcon},
     name:'LoginPage',    
+    head(){
+        return {
+            title: 'Login',
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'index'}
+            ], 
+        }
+    },
     data(){
         return {
             email: '',
@@ -59,8 +68,7 @@ export default {
                 
             } catch (error) {
                 console.log(error)
-                if(!error.response) return this.err = "ocorreu um erro no servidor"
-                this.err = error.response.data.err
+                this.err = error.err
             }
         }
     }

@@ -1,12 +1,15 @@
 <template>
   <Loading v-if="!loaded"></Loading>
-  <section id="categories" @keydown="checkEscape" @click="search = false" v-if="loaded">
+  <section id="categories" @keydown="checkEscape" @click="closeSearch(), toggleMembersContextMenu()" v-if="loaded">
     <div class="dark-background" v-if="search"></div>
       <div class="container">
           <div class="categories">
               <span class="category-error">{{ err }}</span>
-              <MyForm placeholderProps="Category Name" @submitForm="createCategory($event)"/>
-              <div class="categories-container">
+              <div class="form-container">
+                <MyForm placeholderProps="Category Name" @submitForm="createCategory($event)"/>
+                <ShowMembersBtn v-if="mobile" @click="toggleShowMembers"></ShowMembersBtn>
+              </div>
+              <div class="categories-container" v-if="!showMembers">
                 <Category v-for="category in categories" :key="category.ID" 
                  :categoryProps="category"
                  :groupIDProps="groupID"
@@ -14,9 +17,35 @@
                  @deleteCategory="removeCategory($event)"></Category>
               </div>
           </div>
-          <div class="members">
+          <div class="members" v-if="!mobile">
+            <span class="error">{{errMemberActions}}</span>
             <button class="btn-special" @click.stop="search = !search">Add user to group</button>
-              <Member v-for="member in members" :key="member.ID" :memberProps="member"></Member>
+              <Member v-for="member in members" :key="member.ID" 
+              
+              :memberProps="member" :groupProps="group"
+              :ContextMenuAdminProps="iamAdmin" :ContextMenuOwnerProps="iamLeader" :ContextMenuMemberProps="iamMember"
+              :toggleContextMenuProps="membersContextMenu"
+
+              @closeOthersContextMenu="setMembersContextMenuProps"
+              @kickMember="kickMember($event)"
+              @giveAdmin="giveAdmin($event)"
+              @removeAdmin="removeAdmin($event)"
+              ></Member>
+          </div>
+          <div class="members-mobile" v-if="mobile && showMembers">
+            <span class="error">{{errMemberActions}}</span>
+            <button class="btn-special" @click.stop="search = !search">Add user to group</button>
+              <Member v-for="member in members" :key="member.ID" 
+              
+              :memberProps="member" :groupProps="group"
+              :ContextMenuAdminProps="iamAdmin" :ContextMenuOwnerProps="iamLeader" :ContextMenuMemberProps="iamMember"
+              :toggleContextMenuProps="membersContextMenu"
+
+              @closeOthersContextMenu="setMembersContextMenuProps"
+              @kickMember="kickMember($event)"
+              @giveAdmin="giveAdmin($event)"
+              @removeAdmin="removeAdmin($event)"
+              ></Member>
           </div>
           <div class="search-users" @click.stop="" v-if="search">
             <form class="search-form" @submit.prevent="searchUser">
@@ -46,8 +75,21 @@ import Users from '@/components/Users.vue'
 import Close from '@/components/svgs/Close.vue'
 import Loading from '@/components/Loading.vue'
 import LoadingMicro from '@/components/LoadingMicro.vue'
+import ShowMembersBtn from '@/components/ShowMembersBtn.vue'
 export default {
-  components: { MyForm, Category, Member, Users, SearchIcon, Close, LoadingMicro, Loading },
+  components: { MyForm, Category, Member, Users, SearchIcon, Close, LoadingMicro, Loading, ShowMembersBtn },
+  created() {
+    this.setResponsive()
+  },
+  head(){
+        return {
+            title: this.group.GroupName,
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'noindex'}
+            ], 
+        }
+    },
   async beforeMount(){
     try {
       console.log(this.groupID, 'o iddd')
@@ -72,6 +114,21 @@ export default {
     leader(){
       return this.group.Leader
     },
+    iamLeader(){
+      return this.leader === this.user.ID
+    },
+    iamAdmin(){
+      return this.group.Admins.find(members => members.id === this.user.id)
+    },
+    iamMember(){
+      return !this.iamLeader && !this.iamAdmin
+    }
+  },
+  watch: {
+    '$screen.width'(value){
+     this.setResponsive(value)
+     if(value > 500) this.showMembers = false
+    },
   },
   data(){
     return {
@@ -88,15 +145,27 @@ export default {
         err: '',
         loaded: false,
         searching: false,
+        mobile: false,
+        showMembers: false,
+        membersContextMenu: 0,
+        errMemberActions: '',
 
     }
   },
   methods: {
       ...mapActions({getGroup: 'getGroup', getCategories: 'getCategories', 
         saveCategory: 'createCategory', deleteCategory: 'deleteCategory',
-        editCategory: 'editCategory', sendUserInvite: 'sendUserInvite'
+        editCategory: 'editCategory', sendUserInvite: 'sendUserInvite',
+        removeMember: 'kickMember', addAdmin: 'giveMemberAdmin', 
+        removeMemberAdmin: 'removeMemberAdmin'
         }),
       ...mapMutations({SET_GROUPS: 'SET_GROUPS'}),
+
+      setResponsive(value = this.$screen.width){
+
+        if(value <= 500) return this.mobile = true
+        this.mobile = false
+      },
       async createCategory($event){
         try {
           let category = await this.saveCategory({GroupID: this.groupID, name: $event})
@@ -109,6 +178,9 @@ export default {
       },
       simulateSubmit(){
         document.getElementById('search-user').click()
+      },
+      toggleShowMembers() {
+        this.showMembers = !this.showMembers
       },
       async updateCategoryName(category) {
         try {
@@ -151,6 +223,16 @@ export default {
       checkEscape($event) {
         if($event.code === 'Escape') this.search = false
       },
+      closeSearch(){
+        this.search = false
+      },
+      toggleMembersContextMenu(){
+        this.membersContextMenu = "0"
+      },
+      setMembersContextMenuProps($event){
+        console.log('vou setar o contextMenu', $event)
+        this.membersContextMenu = $event
+      },
       async invite($event){
         let invite = {
           ...$event,
@@ -164,7 +246,35 @@ export default {
         } catch (error) {
           this.errInvited = error
         }
-      }
+      },
+      async kickMember($event){
+        const payload = {memberID: $event, groupID: this.groupID}
+        try {
+          const group = await this.removeMember(payload)
+          this.group = group
+        } catch (error) {
+          this.errMemberActions = error.err
+        }
+      },
+      async giveAdmin($event){
+        const payload = {memberID: $event, groupID: this.groupID}
+        try {
+          const Admins = await this.addAdmin(payload)
+          console.log('vou adicionar o admin', Admins)
+          this.group.Admins = Admins
+        } catch (error) {
+          this.errMemberActions = error.err
+        }
+      },
+      async removeAdmin($event){
+        const payload = {memberID: $event, groupID: this.groupID}
+        try {
+          const Admins = await this.removeMemberAdmin(payload)
+          this.group.Admins = Admins
+        } catch (error) {
+          this.errMemberActions = error.err
+        }
+      },
   },
 }
 </script>
@@ -188,6 +298,7 @@ export default {
     }
     .container {
       display: flex;
+      height: calc(100vh - 4%);
     }
     .categories {
       width: 90%;
@@ -196,6 +307,12 @@ export default {
       display: flex;
       height: 91%;
       gap: 10px;
+      flex: 1.3;
+      padding: 0px 8px;
+      .form-container {
+        display: flex;
+        align-items: center;
+      }
       .categories-container {
         width: 100%;
         display: flex;
@@ -206,12 +323,12 @@ export default {
       }
     }
     .members {
-      display: inline-flex;
+      display: flex;
       height: fit-content;
       min-height: 200px;
       max-height: 90vh;
       padding: 14px;
-      flex: 1;
+      flex: 0.7;
       max-width: 400px;
       flex-direction: column;
       align-items: flex-start;
@@ -226,7 +343,32 @@ export default {
         cursor: pointer;
         @include specialBtn(3px, 3px, 1.4rem)
       }
-  }
+    }
+    .members-mobile {
+      display: flex;
+      height: fit-content;
+      min-height: 200px;
+      max-height: 90vh;
+      padding: 14px;
+      width: 99%;
+      max-width: 400px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      border-radius: 20px;
+      background: #0E0E0D;
+      margin: 3.938rem auto 0px auto;
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -10%);
+      .btn-special {
+        max-height: 55px;
+        width: 100%;
+        cursor: pointer;
+        @include specialBtn(3px, 3px, 1.4rem)
+      }
+    }
   .search-users {
     position: absolute;
     width: 98%;
@@ -297,4 +439,9 @@ export default {
     }
   }
 }
+@media screen and (max-width: 860px) {
+        #categories {
+          padding-top: 1%;
+        }
+    }
 </style>

@@ -16,6 +16,15 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import Groups from '@/components/Groups.vue'
 import MyForm from '@/components/MyForm.vue'
 export default {
+    head(){
+        return {
+            title: 'Groups',
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'noindex'}
+            ], 
+        }
+    },
     async beforeMount(){
         try {
             await this.setGroups()
@@ -147,5 +156,10 @@ export default {
         gap: 13px;
         overflow-y: auto;
 
+    }
+    @media screen and (max-width: 860px) {
+        .groups-container {
+            padding: 15px 0px 0px;
+        }
     }
 </style>

@@ -1,5 +1,6 @@
 <template>
     <div class="content-container">
+        <span class="locations-errs">{{err}}</span>
       <form @submit.prevent="search()">
           <div class="search-container">
               <input type="search" placeholder="Search" name="search" id="search" autocomplete="off" v-model="text">
@@ -34,11 +35,22 @@
   import { mapActions, mapMutations, mapState } from 'vuex'
   
   export default {
+    head(){
+        return {
+            title: this.categoryName + ' Search',
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'noindex'}
+            ], 
+        }
+    },
       async mounted(){
         try {
             let category = await this.getCategory({categoryID: this.categoryID, groupID: this.groupID})
+            this.categoryName = category.Name
             this.SET_STATE(category)
-            
+            let {BlackListLocations}= await this.getGroup(this.groupID)
+            this.SET_CURRENT_LOCATIONS_BLACK_LISTED(BlackListLocations)
         } catch (error) {
             this.err = error.err
         }
@@ -62,15 +74,27 @@
               copySpecial: undefined,
               searching: false,
               err: '',
+              categoryName: '',
+              mobile: false,
+              
           }
       },
+      watch: {
+        '$screen.width'(value){
+            this.setResponsive(value)
+        },
+      },
       computed: {
-          ...mapState({locationStore: state => state.categories.category})
+          ...mapState({locationStore: state => state.categories.category, BlackListLocations: state => state.groups.CurrentGroupBlackListLocations})
       },
       components:{SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall},
       methods: {
           ...mapActions({saveLocation:'saveLocationInCategory', getCategory: 'getCategory'}),
           ...mapMutations({SET_STATE: 'SET_CATEGORY_STATE'}),
+          setResponsive(value = this.$screen.width){
+            if(value <= 860) return this.mobile = true
+            this.mobile = false
+          },
           filterSelected(filter){
               let newFiltersList = this.filtersList.map(obj => {
                   if(obj.name === filter && obj.googleFilter){
@@ -103,7 +127,8 @@
   
               this.googleFiltersSelecteds = googleFiltersTreated.join(',')
               this.apiFiltersSelecteds = apiFiltersNamesTreated.join(',')
-              console.log(apiFiltersNamesTreated, googleFiltersTreated)
+
+              this.search()
           },
           simulateSubmit(){
               document.querySelector('input[type="submit"]').click()
@@ -138,9 +163,9 @@
               this.locations = newArray
           },
           async isLocationBlackListed(locations){
-                if(this.locationStore.BlackListLocations.length < 1) return
+                if(this.BlackListLocations.length < 1) return
                 let newArray = locations.filter(location => {
-                    let found = this.locationStore.BlackListLocations.find(filter => {
+                    let found = this.BlackListLocations.find(filter => {
                         return filter.googleMapsUri === location.googleMapsUri
                     })
                     if(found) return false
@@ -273,6 +298,19 @@
       .filters-leave-to {
           opacity: 0;
           transform: translate(-50%, 0%);
+      }
+      @media screen and (max-width: 860px) {
+        .content-container {
+          width: 100%;
+          height: 81.5%;
+          border-radius: 40px;
+          margin-top: 10px;
+          background: #0E0E0D;
+          padding: 20px 20px 0px;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+      }
       }
   
   </style>

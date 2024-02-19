@@ -1,5 +1,6 @@
 <template>
     <div class="content-container">
+      <span class="locations-errs">{{err}}</span>
       <form @submit.prevent="search()">
           <div class="search-container">
               <input type="search" placeholder="Search" name="search" id="search" autocomplete="off" v-model="text">
@@ -15,9 +16,16 @@
           </Transition>
       </form>
       <LoadingSmall v-if="!loaded"></LoadingSmall>
-      <div class="cards-container">
-            {{err}}
+      <div class="cards-container" v-if="loaded && !mobile">
           <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
+          :placesSavedProps="false"
+          :placesBlackListedProps="true"
+          @removeBlackListCard="removeBlackListCard($event)"
+          />
+      </div>
+
+      <div class="cards-container" v-if="loaded && mobile">
+          <LocationCardMobile v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
           :placesSavedProps="false"
           :placesBlackListedProps="true"
           @removeBlackListCard="removeBlackListCard($event)"
@@ -33,13 +41,27 @@
   import LocationCard from '@/components/LocationCard.vue'
   import { mapActions, mapMutations, mapState } from 'vuex'
 import LoadingSmall from '@/components/LoadingSmall.vue'
+import LocationCardMobile from '@/components/LocationCardMobile.vue'
   
   export default {
     /* eslint-disable */
+    head(){
+        return {
+            title: this.groupName + ' Black List',
+            meta: [
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                {name: 'robots', content: 'noindex'}
+            ], 
+        }
+    },
+    created(){
+      this.setResponsive()
+    },
       async mounted(){
         try {
-          let {BlackListLocations} = await this.getGroup(this.groupID)
+          let {BlackListLocations, GroupName} = await this.getGroup(this.groupID)
           this.locations = BlackListLocations
+          this.groupName = GroupName
           this.SET_CURRENT_LOCATIONS_BLACK_LISTED(BlackListLocations)    
           this.locationStore.CurrentGroupBlackListLocations = BlackListLocations
           this.loaded = true     
@@ -66,6 +88,8 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
               copySpecial: undefined,
               err: '',
               loaded: false,
+              groupName: '',
+              mobile: false,
               
           }
       },
@@ -75,15 +99,22 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
       watch: {
         text(){
             this.search()
-        }
+        },
+        '$screen.width'(value){
+            this.setResponsive(value)
+        },
       },
-      components:{SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall},
+      components:{ SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall, LocationCardMobile },
       methods: {
           ...mapActions({saveLocation:'saveLocation', getGroup: 'getGroup',
           deleteLocation: 'deleteLocation', addLocationToBlackList: 'addLocationToBlackList',
           removeLocationFromBlackList: 'removeLocationFromGroupBlackList'
           }),
           ...mapMutations({SET_CURRENT_LOCATIONS_BLACK_LISTED: 'SET_CURRENT_LOCATIONS_BLACK_LISTED'}),
+          setResponsive(value = this.$screen.width){
+            if(value <= 860) return this.mobile = true
+            this.mobile = false
+          },
           filterSelected(filter){
               let newFiltersList = this.filtersList.map(obj => {
                   if(obj.name === filter && obj.googleFilter){
@@ -102,6 +133,7 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
               this.toggleFilter()
           },
           async toggleFilter(){
+            try {
               let filtersSelecteds = this.filtersList.filter(filter => {
                   return filter.selected === true
               })
@@ -115,12 +147,17 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
               let apiFiltersNamesTreated = Array.from(apiFiltersNames).map(filter => filter.apiFilter)
               this.apiFiltersSelecteds = apiFiltersNamesTreated
               this.googleFiltersSelecteds = googleFiltersTreated
+
               await this.applyFilters()
+              
+            } catch (error) {
+              this.err = error.err
+            }
           },
           async applyFilters(){
-            let newPlaces = this.locationStore.SavedLocations
-            let {openNow, onlyWhats, facebook, webSite, phone} =  await this.setVariables()
+            let newPlaces = this.locationStore.CurrentGroupBlackListLocations
             try {
+              let {openNow, onlyWhats, facebook, webSite, phone} =  await this.setVariables()
                 if(openNow){
                     newPlaces = this.getLocationsOpeneds(newPlaces)
                 }
@@ -143,6 +180,7 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
                 return this.locations = newPlaces
              }
             catch(err){
+              console.log('deu erro', err)
                 throw err
             }
           },
@@ -173,9 +211,7 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
                 }
             }
             return new Promise((resolve, reject) => {
-                resolve({openNow, onlyWhats, facebook, webSite, phone})
-                console.log(reject)
-               
+                resolve({openNow, onlyWhats, facebook, webSite, phone})               
             })
           },
           simulateSubmit(){
@@ -285,6 +321,7 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
       }
     },
     getLocationsWithSites(places) {
+      console.log(places, 'os lugares')
       try {
         return places.filter(filter => {
           if(!filter.websiteUri) return false
@@ -292,6 +329,7 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
         })
         
       } catch (error) {
+        console.log('o erro aqui', error)
         throw {err: 'ocorreu um erro'}
       }
     }
@@ -410,6 +448,19 @@ import LoadingSmall from '@/components/LoadingSmall.vue'
           opacity: 0;
           transform: translate(-50%, 0%);
       }
+      @media screen and (max-width: 860px) {
+        .content-container {
+          width: 100%;
+          height: 81.5%;
+          border-radius: 40px;
+          margin-top: 10px;
+          background: #0E0E0D;
+          padding: 20px 20px 0px;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+      }
+    }
   
   </style>
   

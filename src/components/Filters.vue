@@ -58,5 +58,16 @@ export default {
     .selected {
         color: $gold !important;
     }
+    @media screen and (max-width: 860px) {
+        .filters-container {
+            justify-content: center;
+            gap: 23px;
+            top: 50%;
+            left: 50%;
+            flex-wrap: wrap;
+            transform: translate(-50%, 50%);
+        }
+    }
+    
 </style>
 
