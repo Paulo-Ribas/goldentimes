@@ -172,4 +172,22 @@ export default {
             }
         }
 
+        @media screen and (max-height: 580px) {
+            .profile-img-container {
+                width: 70%  !important;
+                height: 50% !important;
+                max-width: 169px !important;
+                min-width: 110px;
+                min-height: 110px;
+                overflow: hidden;
+                border-radius: 50%;
+                background-image: $default-gradient;
+                max-width: 235px;
+                max-height: 235px;
+                position: relative;
+                margin: 0px auto;
+            }
+            
+        }
+
 </style>

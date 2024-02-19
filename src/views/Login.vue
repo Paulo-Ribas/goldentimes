@@ -2,10 +2,10 @@
     <div class="container">
         <section id="login">
             <div class="login-container">
+                <LoginSignError :errProps="err" v-if="err !== ''"></LoginSignError>
                 <form @submit.prevent="submit">
                     <div class="inputs">
                         <div class="name-email">
-                            <span class="login-sign-errs"> {{err}}</span>
                             <label for="email">Email</label>
                             <div class="input-container">
                                 <EmailIcon></EmailIcon>
@@ -34,11 +34,12 @@
 </template>
 
 <script>
+import LoginSignError from '@/components/LoginSignError.vue';
 import EmailIcon from '@/components/svgs/EmailIcon.vue';
 import PassIcon from '@/components/svgs/PassIcon.vue';
 import { mapActions, mapMutations } from 'vuex';
 export default {
-    components: {EmailIcon, PassIcon},
+    components: { EmailIcon, PassIcon, LoginSignError },
     name:'LoginPage',    
     head(){
         return {
@@ -90,8 +91,9 @@ export default {
         align-items: center;
         .login-container{
             display: flex;
-            width: 99%;
-            height: 99%;
+            width: 96%;
+            height: 96%;
+            position: relative;
             max-width: 420px;
             max-height: 298px;
             flex-direction: column;
@@ -144,7 +146,7 @@ export default {
                     width: 85%;
                     max-width: 430px;
                     font-family: $main-font;
-                    font-size: 0.6rem;
+                    font-size: 0.9rem;
                     font-style: normal;
                     font-weight: 400;
                     line-height: normal;
@@ -173,7 +175,7 @@ export default {
                     span {
                         color: rgba(232, 232, 232, 0.50);
                         font-family: $main-font;
-                        font-size: 10px;
+                        font-size: 0.9rem;
                         font-style: normal;
                         font-weight: 400;
                         line-height: normal;
@@ -181,7 +183,7 @@ export default {
                     a {
                         color: #F5CB86;
                         font-family: $main-font;
-                        font-size: 10px;
+                        font-size: 0.9rem;
                         font-style: normal;
                         font-weight: 400;
                         line-height: normal;

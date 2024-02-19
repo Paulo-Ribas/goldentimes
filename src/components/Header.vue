@@ -38,7 +38,7 @@ export default {
                 width: 100%;
                 height: 100%;
                 animation: rotateLogo;
-                animation-duration: 1.3s;
+                animation-duration: 4.3s;
                 animation-fill-mode:both;
                 animation-timing-function: linear;
                 animation-iteration-count: infinite;

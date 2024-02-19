@@ -2,8 +2,8 @@
     <div class="container">
         <section id="signup">
             <div class="signup-container">
+                <LoginSignError :errProps="err" v-if="err!== '' "></LoginSignError>
                 <form @submit.prevent="submit">
-                   <span class="login-sign-errs"> {{err}}</span>
                     <h1>goldentimes</h1>
                     <div class="inputs">
                         <div class="name-email">
@@ -43,13 +43,14 @@
 </template>
 
 <script>
+import LoginSignError from '@/components/LoginSignError.vue';
 import Bar from '../components/svgs/Bar'
 import EmailIcon from '@/components/svgs/EmailIcon.vue';
 import PassIcon from '@/components/svgs/PassIcon.vue';
 import UserIcon from '@/components/svgs/UserIcon.vue';
 import { mapActions, mapMutations } from 'vuex';
 export default {
-    components: {Bar, EmailIcon, PassIcon, UserIcon},
+    components: { Bar, EmailIcon, PassIcon, UserIcon, LoginSignError },
     head(){
         return {
             title: 'Sign Up',
@@ -127,6 +128,7 @@ export default {
             background: $default-gradient;
             border-radius: 40px;
             box-shadow: 8px 8px 8px 0px rgba(0, 0, 0, 0.70);
+            position: relative;
             form {
                 width: calc(100% - 3px);
                 height: calc(100% - 3px);
@@ -171,7 +173,7 @@ export default {
                     width: 85%;
                     max-width: 430px;
                     font-family: $main-font;
-                    font-size: 0.6rem;
+                    font-size: 0.9rem;
                     font-style: normal;
                     font-weight: 400;
                     line-height: normal;

@@ -2,7 +2,7 @@
      <div class="invite-container">
         <div class="invite-informations">
             <div v-for="invite in invites" :key="invite.ID" class="invite-box">
-                <h3>convite para o grupo <span class="group-name">{{invite.GroupName}}</span> enviado por <span class="invite-name">{{invite.InviterName}}</span></h3>
+                <h3>Convite para o grupo <span class="group-name">{{invite.GroupName}}</span> enviado por <span class="invite-name">{{invite.InviterName}}</span></h3>
                 <div class="btns-container">
                     <button @click="emitAccept(invite)">accept</button>
                     <button @click="emitRefuse(invite)">decline</button>

@@ -450,7 +450,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
       @media screen and (max-width: 860px) {
         .content-container {
           width: 100%;
-          height: 81.5%;
+          height: 100%;
           border-radius: 40px;
           margin-top: 10px;
           background: #0E0E0D;

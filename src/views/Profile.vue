@@ -289,7 +289,7 @@ main {
     aside {
     width: 99%;
     max-width: 333px;
-    height: 45%;
+    height: 38%;
     flex: unset;
     .profile-container {
         width: 100%;
@@ -310,7 +310,7 @@ main {
     margin-top: 20px;
     flex: unset;
     width: 100%;
-    height: 100vh;
+    height: -webkit-fill-available;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -347,6 +347,30 @@ main {
     }
 
 }
+}
+@media screen and (max-height: 580px) {
+    aside {
+    width: 99%;
+    max-width: 333px;
+    height: fit-content !important;
+    flex: unset;
+    .profile-container {
+        width: 100%;
+        height: calc(100% - 75px);
+        min-height: 323px !important;
+        border-image: $default-gradient;
+        border-image-slice: 1;
+        border-width: 4px;
+        border-style: solid;
+        max-height: 470px;
+        margin-top: 5px !important;
+    }
+    .groups-container {
+        width: 100%;
+        display: flex;
+    }
+}
+
 }
 
 </style>

@@ -21,9 +21,11 @@
 #app {
   width: 100%;
   height: 100vh;
-  overflow-y: auto;
+  overflow: hidden;
   background-color: #111;
   background-image: url('./assets/imgs/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .container {
   width: 100%;

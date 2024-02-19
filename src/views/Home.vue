@@ -1,4 +1,5 @@
 <template>
+    <div class="body">
         <div class="container">
             <Header></Header>
             <main>
@@ -23,6 +24,7 @@
         <footer>
             <span> Todos direitos reservados ®Golden Times • 2024 </span>
         </footer>
+    </div>
 </template>
 
 <script>
@@ -126,7 +128,7 @@ export default {
             containerWidth = container.getBoundingClientRect().width,
             translatePositive = Math.abs(translate)
             
-            if(translatePositive >= (295 * (amount - 4) + (34 * amount))) {
+            if(translatePositive >= (slideWidth - containerWidth)  + (10 * amount)) {
                 translate = ((slideWidth - containerWidth)  + (10 * amount))  * -1
                 
             }
@@ -139,6 +141,12 @@ export default {
 <style scoped lang="scss">
 @import '../assets/scss/variables.scss';
 
+.body {
+    overflow-y: auto;
+    width: 100%;
+    height: 100vh;
+}
+
 .container {
     height: fit-content;
 }
@@ -147,10 +155,10 @@ main {
     padding-top: 5vh;
     h1 {
         text-align: center;
-        font-size: 3.5rem;
+        font-size: 5.5rem;
         text-transform: uppercase;
         color: $text-color;
-        margin-bottom: 40px;
+        margin-bottom: 125px;
 
         .gold {
             color: $gold;
@@ -163,14 +171,14 @@ main {
         font-family: $main-font;
         text-align: center;
         text-transform: capitalize;
-        margin-bottom: 25px;
+        margin-bottom: 40px;
     }
 }
 
 .slide-container {
     width: 99%;
     height: 70vh;
-    max-height: 315px;
+    max-height: 316px;
     margin: auto;
     overflow: hidden;
 
@@ -190,7 +198,7 @@ main {
     transition: .6s !important;
 }
 .advantages {
-    margin-top: 60px;
+    margin-top: 110px;
     margin-bottom: 80px;
     width: 100%;
     display: flex;
