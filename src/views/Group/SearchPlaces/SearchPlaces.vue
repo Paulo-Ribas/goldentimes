@@ -135,8 +135,8 @@
           },
           search(){
               this.searching = true
-              let url = this.apiFiltersSelecteds !== '' ? `http://localhost:12000/goldentimes/locations/${this.text}/places.nationalPhoneNumber,${this.googleFiltersSelecteds}/${this.apiFiltersSelecteds}` 
-              : `http://localhost:12000/goldentimes/locations/${this.text}/places.nationalPhoneNumber,${this.googleFiltersSelecteds}`
+              let url = this.apiFiltersSelecteds !== '' ? `https://33bits.tech/goldentimes/locations/${this.text}/places.nationalPhoneNumber,${this.googleFiltersSelecteds}/${this.apiFiltersSelecteds}` 
+              : `https://33bits.tech//locations/${this.text}/places.nationalPhoneNumber,${this.googleFiltersSelecteds}`
               console.log('vou fazer a pesquisa', url)
               axios.get(url)
               .then(response =>{

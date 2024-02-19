@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
-let url = 'http://localhost:12000/goldentimes/'
+let url = 'https://33bits.tech/goldentimes/'
 
 export default createStore({
   modules: {

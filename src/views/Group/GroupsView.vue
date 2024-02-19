@@ -140,7 +140,7 @@ export default {
         search: false,
         users: [],
         userSearch: '',
-        url: 'http://localhost:12000/goldentimes/',
+        url: 'https://33bits.tech/goldentimes/',
         usersInvited: [],
         err: '',
         loaded: false,
