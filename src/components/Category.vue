@@ -78,7 +78,7 @@ export default {
             font-family: $main-font;
             font-size: 1.6rem;
             font-style: normal;
-            font-weight: 700;
+            font-weight: 500;
             line-height: normal;
             text-decoration: none;
             transition: 0.1s;

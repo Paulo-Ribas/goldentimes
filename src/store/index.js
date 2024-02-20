@@ -124,7 +124,7 @@ export default createStore({
         },
         async editPasswordByToken(context, payload){
           return new Promise((resolve, reject) => {
-            axios.put(`${url}goldentimes/recoverypassword`, payload)
+            axios.put(`${url}recoverypassword`, payload)
             .then(response => {
               console.log(response)
               resolve(response)
@@ -137,7 +137,7 @@ export default createStore({
         },
         async recoveryPassword(context, payload){
           return new Promise((resolve, reject) => {
-            axios.post(`${url}goldentimes/request-token`, {email: payload})
+            axios.post(`${url}request-token`, {email: payload})
             .then(response => {
               console.log(response)
               resolve(response)

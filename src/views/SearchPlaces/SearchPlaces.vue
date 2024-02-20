@@ -125,7 +125,7 @@ export default {
             this.googleFiltersSelecteds = googleFiltersTreated.join(',')
             this.apiFiltersSelecteds = apiFiltersNamesTreated.join(',')
 
-           if(filter != 'Copy WhatsApp Api Link') this.search()
+           if(filter !== 'Copy WhatsApp Api Link') this.search()
         },
         simulateSubmit(){
             document.querySelector('input[type="submit"]').click()

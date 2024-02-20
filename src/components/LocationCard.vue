@@ -182,9 +182,12 @@ export default {
         copyNumber(){
             if(this.phone == '??') return
             let numberTreated = this.phone.replace(/[^\d]+/g, '')
-            if(this.copyForWhatsApi) return navigator.clipboard.writeText(`https://api.whatsapp.com/send?phone=${numberTreated}`)
-            navigator.clipboard.writeText(numberTreated)
-            this.copied = true
+
+            if(this.copyForWhatsApi)  navigator.clipboard.writeText(`https://api.whatsapp.com/send?phone=${numberTreated}`)  
+            else navigator.clipboard.writeText(numberTreated)
+                
+                this.copied = true
+                
             setTimeout(() => {
                 this.copied = false
             }, 400);
