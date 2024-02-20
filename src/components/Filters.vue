@@ -41,7 +41,7 @@ export default {
         top: 100%;
         left: 50%;
         flex-wrap: wrap;
-        transform: translate(-50%, 100%);
+        transform: translate(-50%, 150%);
         .filter-name {
             border-radius: 40px;
             background: #191918;
@@ -65,7 +65,7 @@ export default {
             top: 50%;
             left: 50%;
             flex-wrap: wrap;
-            transform: translate(-50%, 50%);
+            transform: translate(-50%, 90%);
         }
     }
     
