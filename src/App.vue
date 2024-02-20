@@ -26,6 +26,7 @@
   background-image: url('./assets/imgs/background.png');
   background-repeat: no-repeat;
   background-size: cover;
+  font-family: $main-font;
 }
 .container {
   width: 100%;
