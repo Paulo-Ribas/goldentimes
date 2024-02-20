@@ -80,7 +80,7 @@ import Loading from '@/components/Loading.vue';
          imgSrc: {
              get() {
                  let choice =  Math.floor(Math.random() * 7)
-                 if(choice > 3) return require('../../assets/imgs/groupNormal.png');
+                 if(choice > 3 ||  choice < 1) return require('../../assets/imgs/groupNormal.png');
                    if(choice === 3)  return require('../../assets/imgs/groupHappy.png');
                    if(choice === 2)  return require('../../assets/imgs/friendsGroup.png');
                    if(choice === 1)  return require('../../assets/imgs/coupleGroup.png');

@@ -176,6 +176,7 @@ main {
         text-transform: uppercase;
         color: $text-color;
         margin-bottom: 125px;
+        font-family: cursive;
     }
 
     h3 {
