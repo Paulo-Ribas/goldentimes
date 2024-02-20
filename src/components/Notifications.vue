@@ -80,6 +80,7 @@ export default {
                 font-family: $main-font;
                 width: 100%;
                 text-align: center;
+                padding: 0px 7px;
                 .group-name, .invite-name {
                     max-width: 120px;
                     overflow: hidden;

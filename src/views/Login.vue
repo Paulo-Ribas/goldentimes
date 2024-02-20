@@ -65,7 +65,7 @@ export default {
             try {
                 let response = await this.login({email: this.email, password: this.password})
                 this.SET_TOKEN(response.data)
-                this.$router.push('/profile')
+                this.$router.push('/profile/searchplaces')
                 
             } catch (error) {
                 console.log(error)

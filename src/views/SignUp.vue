@@ -79,7 +79,7 @@ export default {
                 let response = await this.signup({name: this.name, email: this.email, password: this.password})
                 console.log(response)
                 this.SET_TOKEN(response.data)
-                this.$router.push('/profile')
+                this.$router.push('/profile/searchplaces')
                 
             } catch (error) {
                 this.err = error.err
@@ -92,7 +92,6 @@ export default {
 
 <style scoped lang="scss">
 
-  @import url('https://fonts.googleapis.com/css2?family=League+Spartan');
   @import '../assets/scss/variables.scss';
   @import '../assets//scss/buttonsAndInputs.scss';
 

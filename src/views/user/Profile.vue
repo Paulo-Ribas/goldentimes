@@ -41,7 +41,7 @@ import ProfilePublic from '@/components/ProfilePublic.vue';
      methods: {
         ...mapActions({getUser: 'getUser'}),
         returnToPage(){
-            if(!this.$router.options.history.state.back) return this.$router.push('/profile')
+            if(!this.$router.options.history.state.back) return this.$router.push('/profile/searchplaces')
             this.$router.back()
         },
      }

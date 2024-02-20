@@ -28,6 +28,11 @@ export default {
         padding: 1px;
         background: $default-gradient;
         box-shadow: 8px 8px 8px 0px rgba(0, 0, 0, 0.70);
+        &:hover{
+            .text-container {
+                transform: translate(1%, -4%);
+            }
+        }
         .text-container {
             width: 100%;
             background-color: #191918;
@@ -37,6 +42,8 @@ export default {
             color: $text-color;
             font-family: $main-font;
             text-align: center;
+            transform: translate(0%, 0%);
+            transition: 0.3s;
 
         }
     }

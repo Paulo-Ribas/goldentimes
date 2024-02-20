@@ -4,6 +4,7 @@
 
 <style lang="scss">
 @import './assets/scss/variables.scss';
+@import url();
 *{
   padding: 0;
   margin: 0;

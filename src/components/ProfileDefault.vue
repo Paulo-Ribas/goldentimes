@@ -2,7 +2,7 @@
   <div class="profile">
     <div class="sign-out">
         <button @click="logout">Sair</button>
-        <BellWhite v-if="!notification"/>
+        <BellWhite v-if="!notification" @click="emitBell"/>
         <BellGold @click="emitBell" v-else/>
     </div>
     <span class="error">{{err}}</span>
@@ -171,6 +171,11 @@ export default {
                 @include edit-btn
             }
         }
+        @media screen and (max-width: 860px) {
+            .profile-img-container  {
+                width: 58% !important;
+            }
+          }
 
         @media screen and (max-height: 580px) {
             .profile-img-container {

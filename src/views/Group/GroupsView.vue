@@ -7,7 +7,8 @@
               <span class="category-error">{{ err }}</span>
               <div class="form-container">
                 <MyForm placeholderProps="Category Name" @submitForm="createCategory($event)"/>
-                <ShowMembersBtn v-if="mobile" @click="toggleShowMembers"></ShowMembersBtn>
+                <ShowMembersBtn v-if="mobile && !showMembers" @click="toggleShowMembers"></ShowMembersBtn>
+                <CloseWithGradient v-if="mobile && showMembers" @click="toggleShowMembers"></CloseWithGradient>
               </div>
               <div class="categories-container" v-if="!showMembers">
                 <Category v-for="category in categories" :key="category.ID" 
@@ -18,20 +19,23 @@
               </div>
           </div>
           <div class="members" v-if="!mobile">
-            <span class="error">{{errMemberActions}}</span>
-            <button class="btn-special" @click.stop="search = !search">Add user to group</button>
-              <Member v-for="member in members" :key="member.ID" 
-              
-              :memberProps="member" :groupProps="group"
-              :ContextMenuAdminProps="iamAdmin" :ContextMenuOwnerProps="iamLeader" :ContextMenuMemberProps="iamMember"
-              :toggleContextMenuProps="membersContextMenu"
-
-              @closeOthersContextMenu="setMembersContextMenuProps"
-              @kickMember="kickMember($event)"
-              @giveAdmin="giveAdmin($event)"
-              @removeAdmin="removeAdmin($event)"
-              ></Member>
-          </div>
+            <RouterLink to="/groups" class="return">voltar</RouterLink>
+            <div class="members-container">
+              <span class="error">{{errMemberActions}}</span>
+              <button class="btn-special" @click.stop="search = !search">Add user to group</button>
+                <Member v-for="member in members" :key="member.ID" 
+                
+                :memberProps="member" :groupProps="group"
+                :ContextMenuAdminProps="iamAdmin" :ContextMenuOwnerProps="iamLeader" :ContextMenuMemberProps="iamMember"
+                :toggleContextMenuProps="membersContextMenu"
+  
+                @closeOthersContextMenu="setMembersContextMenuProps"
+                @kickMember="kickMember($event)"
+                @giveAdmin="giveAdmin($event)"
+                @removeAdmin="removeAdmin($event)"
+                ></Member>
+            </div>
+            </div>
           <div class="members-mobile" v-if="mobile && showMembers">
             <span class="error">{{errMemberActions}}</span>
             <button class="btn-special" @click.stop="search = !search">Add user to group</button>
@@ -76,8 +80,9 @@ import Close from '@/components/svgs/Close.vue'
 import Loading from '@/components/Loading.vue'
 import LoadingMicro from '@/components/LoadingMicro.vue'
 import ShowMembersBtn from '@/components/ShowMembersBtn.vue'
+import CloseWithGradient from '@/components/CloseWithGradient.vue'
 export default {
-  components: { MyForm, Category, Member, Users, SearchIcon, Close, LoadingMicro, Loading, ShowMembersBtn },
+  components: { MyForm, Category, Member, Users, SearchIcon, Close, LoadingMicro, Loading, ShowMembersBtn, CloseWithGradient },
   created() {
     this.setResponsive()
   },
@@ -323,26 +328,43 @@ export default {
       }
     }
     .members {
-      display: flex;
-      height: fit-content;
-      min-height: 200px;
-      max-height: 90vh;
-      padding: 14px;
       flex: 0.7;
-      max-width: 400px;
+      display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      flex-shrink: 0;
-      border-radius: 20px;
-      background: #0E0E0D;
-      margin: 3.938rem auto 0px auto;
-      .btn-special {
-        max-height: 55px;
-        width: 100%;
+      align-items: center;
+      padding-top: 22px;
+
+      .return {
+        @include specialBtn(4px, 50px, 1rem);
+        text-transform: uppercase;
         cursor: pointer;
-        @include specialBtn(3px, 3px, 1.4rem)
+        max-height: 29px;
+        text-decoration: none;
+        transform: translateX(calc(16vw - 138px));
+    }
+      .members-container {
+        display: flex;
+        height: fit-content;
+        min-height: 200px;
+        max-height: 90vh;
+        padding: 14px;
+        width: 100%;
+        max-width: 400px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        flex-shrink: 0;
+        border-radius: 20px;
+        background: #0E0E0D;
+        margin: 1.735rem 0px;
+        .btn-special {
+          max-height: 55px;
+          width: 100%;
+          cursor: pointer;
+          @include specialBtn(3px, 3px, 1.4rem)
+        }
       }
+
     }
     .members-mobile {
       display: flex;
@@ -442,6 +464,10 @@ export default {
 @media screen and (max-width: 860px) {
         #categories {
           padding-top: 1%;
+        }
+        .return {
+          transform: translateX(calc(16vw - 100px)) !important;
+
         }
     }
 </style>

@@ -170,6 +170,7 @@ export default {
                 })
                 this.userInvites = newArray
                 this.setGroups()
+                if(this.userInvites.length === 0) return  this.closeNotifications()
             } catch (error) {
                 console.log(error)
                 this.err = error.err
@@ -181,15 +182,14 @@ export default {
             let {GroupID} = $event
             try {
                 let acceptedId = await this.refuseInvite({invite, GroupID})
-                console.log(acceptedId, 'o id aceitado')
                 let newArray = this.userInvites.filter(filter => {
                     console.log(filter.ID, acceptedId)
                     return filter.ID !== acceptedId
                 })
-                console.log(newArray, this.userInvites)
                 this.userInvites = newArray
+                if(this.userInvites.length === 0) return  this.closeNotifications()
             } catch (error) {
-                console.log(error)
+                this.err = error.err
             }
         }
     }
@@ -289,7 +289,7 @@ main {
     aside {
     width: 99%;
     max-width: 333px;
-    height: 38%;
+    height: 50%;
     flex: unset;
     .profile-container {
         width: 100%;

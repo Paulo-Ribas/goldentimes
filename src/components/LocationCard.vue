@@ -177,9 +177,8 @@ export default {
         },
         copyNumber(){
             let numberTreated = this.phone.replace(/[^\d]+/g, '')
-            console.log(`https://api.whatsapp.com/send?phone=${numberTreated}`)
-            /* if(this.copyForWhatsApi) return navigator.clipboard.writeText(`https://api.whatsapp.com/send?phone=${numberTreated}`)
-            navigator.clipboard.writeText(numberTreated) */
+            if(this.copyForWhatsApi) return navigator.clipboard.writeText(`https://api.whatsapp.com/send?phone=${numberTreated}`)
+            navigator.clipboard.writeText(numberTreated)
         },
         SaveCard(){
             this.$emit('saveCard', this.location)

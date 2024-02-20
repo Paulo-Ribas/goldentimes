@@ -26,6 +26,7 @@ export default {
     header {
         width: 100%;
         display: flex;
+        padding-right: 6px;
         justify-content: space-between;
         align-items: center;
         .logo-container {
@@ -74,5 +75,16 @@ export default {
             transform: rotateZ(360deg);
         }
         
+    }
+
+    @media screen and (max-width: 860px) {
+
+        .logo-container {
+            width: 68px !important;
+            height: 88px !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     }
 </style>

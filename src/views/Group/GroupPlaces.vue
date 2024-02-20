@@ -1,5 +1,5 @@
 <template>
-    <h1 v-if="loaded">{{groupName}}</h1>
+    <h1 v-if="loaded">{{categoryName}}</h1>
     <Loading v-if="!loaded"></Loading>
     <div class="container" v-if="loaded">
          <aside>
@@ -12,8 +12,7 @@
                          <img :src="imgSrc" alt="imagem do perfil do usuario">
                      </div>
                      <div class="name-description-container">
-                         <h2 class="name">{{user.name}}</h2>
-                         <p class="description">{{user.description}}</p>
+                         <h2 class="name">{{groupName}}</h2>
                      </div>
                      <button class="edit-btn" @click="backToProfile">Back To Profile</button>
                  </div>
@@ -66,6 +65,8 @@ import Loading from '@/components/Loading.vue';
                 await this.setGroups()
                 this.loaded = true
             }
+            let {Name} = await this.getCategory({categoryID: this.categoryID, groupID: this.groupID})
+            this.categoryName = Name
             this.loaded = true
          } catch (error) {
             this.err = error.err
@@ -73,14 +74,18 @@ import Loading from '@/components/Loading.vue';
          }
         
      },
-     name: "UserProfile",
+     name: "GroupView",
      computed: {
          ...mapState({ user: state => state.user, userGroups: state => state.groups.Groups}),
          imgSrc: {
              get() {
-                 if (this.user.profileImg == 'default.png')
-                     return require('../../assets/imgs/default.png');
-                 return this.user.profileImg;
+                 let choice =  Math.floor(Math.random() * 7)
+                 if(choice > 3) return require('../../assets/imgs/groupNormal.png');
+                   if(choice === 3)  return require('../../assets/imgs/groupHappy.png');
+                   if(choice === 2)  return require('../../assets/imgs/friendsGroup.png');
+                   if(choice === 1)  return require('../../assets/imgs/coupleGroup.png');
+
+                 return choice;
              },
          },
          Groups(){
@@ -96,12 +101,14 @@ import Loading from '@/components/Loading.vue';
              categoryID: this.$route.params.categoryID,
              groupName: '',
              loaded: false,
+             imgPicked: '',
+             categoryName: '',
          }
      },
      components: { RouterLink, DefaultButton, Loading },
      methods: {
         ...mapMutations({SET_GROUPS:'SET_GROUP_STATE'}),
-        ...mapActions({getGroup: 'getGroup', getGroups: 'getGroups'}),
+        ...mapActions({getGroup: 'getGroup', getGroups: 'getGroups', getCategory: 'getCategory'}),
          setActivated(picked){
              switch (picked) {
                  case 'group-search':
@@ -125,7 +132,7 @@ import Loading from '@/components/Loading.vue';
             this.$router.push(`/group/${this.groupID}`)
          },
          backToProfile() {
-            this.$router.push('/profile')
+            this.$router.push('/profile/searchplaces')
          },
          async setGroups(){
             try {

@@ -268,6 +268,11 @@ import LoadingMicro from './LoadingMicro.vue';
                   @include edit-btn
               }
           }
+          @media screen and (max-width: 860px) {
+            .container-profile-icon-img {
+                width: 68%;
+            }
+          }
           @media screen and (max-height: 580px) {
             .container-profile-icon-img{
                 width: 70%  !important;

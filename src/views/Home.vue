@@ -19,6 +19,22 @@
                         <ExtraInfo v-for="(info, index) in infosArray" :key="index" :textProps="info.text"></ExtraInfo>
                     </div>
                 </div>
+                <div class="join">
+                    <div class="join-container">
+                        <h2>Faça o login ou registre-se <br> para <span class="gold">começar sua pesquisa</span></h2>
+                        <div class="register">
+                        <RouterLink to="/sign-up" class="links">Register</RouterLink>
+                           
+                            <div class="or-container">
+                                <div class="white-line"></div>
+                                    <span class="or">or</span>
+                                <div class="white-line"></div>
+                            </div>
+
+                            <RouterLink to="/login" class="links"> Login</RouterLink>
+                        </div> <!--fim do register-->
+                    </div><!--fim do join-container-->
+                </div><!--fim do join-->
             </main>
         </div>
         <footer>
@@ -143,6 +159,7 @@ export default {
 
 .body {
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%;
     height: 100vh;
 }
@@ -155,14 +172,10 @@ main {
     padding-top: 5vh;
     h1 {
         text-align: center;
-        font-size: 5.5rem;
+        font-size: 4.5rem;
         text-transform: uppercase;
         color: $text-color;
         margin-bottom: 125px;
-
-        .gold {
-            color: $gold;
-        }
     }
 
     h3 {
@@ -219,6 +232,53 @@ main {
     }
 }
 
+.join {
+    width: 100%;
+    padding: 90px 0px;
+    margin: 100px 0px;
+    .join-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 60px;
+        h2 {
+            color: $text-color;
+            font-size: 3.8rem;
+            font-family: $main-font;
+        }
+        .register {
+            display: flex;
+            flex-direction: column;
+            width: 93%;
+            gap: 50px;
+            max-width: 510px;
+            align-items: center;
+            .or-container {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+                .white-line {
+                    height: 2px;
+                    background-color: white;
+                    flex: 1;
+                    max-width: 400px;
+                }
+                .or {
+                    display: flex;
+                    width: 30px;
+                    color: $text-color;
+                    justify-content: center;
+                    font-family: $main-font;
+
+                }
+
+            }
+            
+        }
+    }
+}
+
 footer {
     width: 100%;
     background: linear-gradient(180deg, #F5CB86 0%, #7E5936 100%);
@@ -230,9 +290,33 @@ footer {
     span {
         font-weight: bold;
         font-family: $main-font;
-        color: #191918;
+        color: $text-color;
         
     }
 }
 
+.gold {
+    color: $gold;
+}
+
+.links {
+    border-radius: 40px;
+    border: 1px solid #F5CB86;
+    background: linear-gradient(270deg, rgba(126, 89, 54, 0.80) 1.16%, rgba(183, 143, 92, 0.80) 55.93%, rgba(245, 203, 134, 0.80) 96.59%);
+    font-family: $main-font;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    padding: 11px 0px 8px 0px;
+    width: 100%;
+    color: rgba(232, 232, 232, 0.80);
+    text-align: center;
+    text-shadow: 2px 1px 4px rgba(0, 0, 0, 0.90);
+    font-weight: 700;
+    text-decoration: none;
+    transition: .5s;
+    &:hover {
+        box-shadow:  2px 1px 5px 0px $gold;
+        transform: scale(1.03);
+    }
+}
 </style>
