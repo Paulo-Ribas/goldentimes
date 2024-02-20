@@ -35,9 +35,9 @@
   </template>
   
   <script>
-  import SearchIcon from '../components/svgs/SearchIcon.vue'
-  import FiltersIcon from '../components/svgs/FiltersIcon.vue'
-  import Filters from '../components/Filters.vue'
+  import SearchIcon from '../../components/svgs/SearchIcon.vue'
+  import FiltersIcon from '../../components/svgs/FiltersIcon.vue'
+  import Filters from '../../components/Filters.vue'
   import LocationCard from '@/components/LocationCard.vue'
   import LoadingSmall from '@/components/LoadingSmall.vue'
   import { mapActions, mapState } from 'vuex'
@@ -107,6 +107,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           console.log(value)
             if(value <= 860) return this.mobile = true
             this.mobile = false
+            document.querySelector('.container').scrollTop = 0
       },
           filterSelected(filter){
               let newFiltersList = this.filtersList.map(obj => {
@@ -338,15 +339,15 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
   </script>
   
   <style lang="scss" scoped>
-  @import '../assets/scss/variables.scss';
-  @import '../assets/scss/imageCenter.scss';
+  @import '@/assets/scss/variables.scss';
+  @import '@/assets/scss/imageCenter.scss';
       .content-container {
           width: 100%;
           height: 81.5%;
           border-radius: 40px;
           margin-top: 10px;
           background: #0E0E0D;
-          padding: 20px 30px 0px;
+          padding: 34px 30px 0px;
           display: flex;
           flex-direction: column;
           position: relative;

@@ -69,9 +69,9 @@ export default {
         .invite-box {
             width: 100%;
             display: flex;
-            gap: 5px;
+            gap: 11px;
             flex-direction: column;
-            padding: 5px 0px;
+            padding: 20px 0px;
             border-radius: 20px;
             background: #0F0F0F;
             h3 {
@@ -80,6 +80,7 @@ export default {
                 font-family: $main-font;
                 width: 100%;
                 text-align: center;
+                font-weight: 500;
                 padding: 0px 7px;
                 .group-name, .invite-name {
                     max-width: 120px;
@@ -98,7 +99,8 @@ export default {
                 button {
                     cursor: pointer;
                     text-transform: uppercase;
-                    @include defaultBtn(3px, 23px, 1.07rem);
+                    @include defaultBtn(4px, 23px, 1.07rem);
+                    padding-bottom: 1px;
                 }
             }
         }

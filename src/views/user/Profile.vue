@@ -49,8 +49,8 @@ import ProfilePublic from '@/components/ProfilePublic.vue';
  </script>
  
  <style lang="scss" scoped>
- @import '../../assets/scss/variables.scss';
- @import '../../assets/scss/imageCenter.scss';
+ @import '@/assets/scss/variables.scss';
+ @import '@/assets/scss/imageCenter.scss';
  
  h1{
      color: #FFF;

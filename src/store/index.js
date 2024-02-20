@@ -64,7 +64,9 @@ export default createStore({
           return new Promise((resolve, reject) => {
             axios.post(url + 'validate', {}, {headers:{authorization: token}})
             .then(response => {
-              console.log(response,' vou setar agora')
+
+              if(response.data.token) context.SET_TOKEN(response.data.token)
+
               context.commit('SET_USER', response.data.user)
               return resolve()
             }).catch(err => {
@@ -119,6 +121,32 @@ export default createStore({
                 return reject(error)
               })
             })
+        },
+        async editPasswordByToken(context, payload){
+          return new Promise((resolve, reject) => {
+            axios.put(`${url}goldentimes/recoverypassword`, payload)
+            .then(response => {
+              console.log(response)
+              resolve(response)
+            }).catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
+            })
+            
+          })
+        },
+        async recoveryPassword(context, payload){
+          return new Promise((resolve, reject) => {
+            axios.post(`${url}goldentimes/request-token`, {email: payload})
+            .then(response => {
+              console.log(response)
+              resolve(response)
+            }).catch(err => {
+              let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
+              return reject(error)
+            })
+            
+          })
         },
         async getUser(context, payload){
           let ID = payload

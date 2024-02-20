@@ -9,13 +9,13 @@
     .container-loanding{
         width: fit-content;
         height: fit-content;
-        position: relative;
         animation-name: rotation3d ;
         animation-duration: 1.3s;
         animation-fill-mode:both;
         animation-timing-function: linear;
         animation-iteration-count: infinite;
         position: absolute;
+        z-index: 3;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);

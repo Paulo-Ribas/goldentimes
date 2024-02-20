@@ -270,7 +270,7 @@ import LoadingMicro from './LoadingMicro.vue';
           }
           @media screen and (max-width: 860px) {
             .container-profile-icon-img {
-                width: 68%;
+                width: 90%;
             }
           }
           @media screen and (max-height: 580px) {

@@ -110,9 +110,9 @@
                   return filter.name === 'Copy WhatsApp Api Link' && filter.selected
               })
               found ? this.copySpecial = true : this.copySpecial = false
-              this.toggleFilter()
+              this.toggleFilter(filter)
           },
-          toggleFilter(){
+          toggleFilter(filter){
               let filtersSelecteds = this.filtersList.filter(filter => {
                   return filter.selected === true
               })
@@ -128,7 +128,7 @@
               this.googleFiltersSelecteds = googleFiltersTreated.join(',')
               this.apiFiltersSelecteds = apiFiltersNamesTreated.join(',')
 
-              this.search()
+              if(filter != 'Copy WhatsApp Api Link') this.search()
           },
           simulateSubmit(){
               document.querySelector('input[type="submit"]').click()
@@ -197,7 +197,7 @@
           border-radius: 40px;
           margin-top: 10px;
           background: #0E0E0D;
-          padding: 20px 30px 0px;
+          padding: 34px 30px 0px;
           display: flex;
           flex-direction: column;
           position: relative;

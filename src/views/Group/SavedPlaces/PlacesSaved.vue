@@ -356,7 +356,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           border-radius: 40px;
           margin-top: 10px;
           background: #0E0E0D;
-          padding: 20px 30px 0px;
+          padding: 34px 30px 0px;
           display: flex;
           flex-direction: column;
           position: relative;

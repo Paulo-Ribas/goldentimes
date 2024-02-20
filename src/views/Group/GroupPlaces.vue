@@ -20,7 +20,6 @@
              <div class="groups-container">
                  <DefaultButton btnNameProps="Create Group" hrefProps="/groups/create" v-if="!Groups"></DefaultButton>
                  <DefaultButton v-else btnNameProps="My Groups" hrefProps="/groups"></DefaultButton>
-
              </div>
          </aside>
          <main>
@@ -160,7 +159,7 @@ import Loading from '@/components/Loading.vue';
      font-style: normal;
      font-weight: 700;
      line-height: normal;
-     padding: 8px 0px;
+     padding: 11px 0px 8px 0px;
      background: $default-gradient;
  }
  .container {
@@ -188,7 +187,7 @@ import Loading from '@/components/Loading.vue';
              padding: 5px 0px 30px 0px;
              .sign-out {
                  width: 100%;
-                 padding: 5px;
+                 padding: 6px 11px;
                  button{
                      border: 0.796px solid #F5CB86;
                      border-radius: 31.853px;
@@ -201,7 +200,7 @@ import Loading from '@/components/Loading.vue';
                      font-weight: 700;
                      line-height: normal;
                      text-transform: uppercase;
-                     padding: 1px 13px;
+                     padding: 3px 13px  1px 13px;
                      transition: 0.4s;
                      cursor: pointer;
                      &:hover {

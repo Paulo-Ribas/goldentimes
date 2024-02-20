@@ -21,7 +21,7 @@
                         </div>
                     </div> <!--fim .inputs-->
                     <div class="forgot">
-                        <RouterLink to="login">Forgot Password</RouterLink>
+                        <RouterLink to="/request-token">Forgot Password</RouterLink>
                     </div>
                     <input type="submit" @click.prevent="submit" value="Login">
                     <div class="no-account">
@@ -79,9 +79,8 @@ export default {
 
 <style scoped lang="scss">
 
-  @import url('https://fonts.googleapis.com/css2?family=League+Spartan');
-  @import '../assets/scss/variables.scss';
-  @import '../assets//scss/buttonsAndInputs.scss';
+  @import '@/assets/scss/variables.scss';
+  @import '@/assets//scss/buttonsAndInputs.scss';
 
     #login {
         width: 100%;

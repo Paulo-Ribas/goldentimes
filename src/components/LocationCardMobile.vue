@@ -30,6 +30,9 @@
               </address>
           </li>
           <li @click="copyNumber()">
+            <Transition name="copied">
+            <span class="copy-warn" v-if="copied">Copied!</span>
+            </Transition>
               <div class="icon-container">
                   <PhoneSvg></PhoneSvg>
               </div>
@@ -156,7 +159,8 @@
               activedName: false,
               addBlackList: 'Black List',
               placesSaved: this.placesSavedProps,
-              placesBlackListed: this.placesBlackListedProps
+              placesBlackListed: this.placesBlackListedProps,
+              copied: false
           }
       },
       components: { StarYellow, StarTransparent, StarHalf, Image, PhoneSvg, FacebookSvg, WebUri, LocationSvg},
@@ -176,11 +180,15 @@
               }
           },
           copyNumber(){
+            if(this.phone == '??') return
               let numberTreated = this.phone.replace(/[^\d]+/g, '')
-              console.log(`https://api.whatsapp.com/send?phone=${numberTreated}`)
-              /* if(this.copyForWhatsApi) return navigator.clipboard.writeText(`https://api.whatsapp.com/send?phone=${numberTreated}`)
-              navigator.clipboard.writeText(numberTreated) */
-          },
+              if(this.copyForWhatsApi) return navigator.clipboard.writeText(`https://api.whatsapp.com/send?phone=${numberTreated}`)
+            navigator.clipboard.writeText(numberTreated)
+            this.copied = true
+            setTimeout(() => {
+                this.copied = false
+            }, 400);
+        },
           toggleSavedBtn(){
             console.log('isso esta vindo aqui?')
             if(this.saved) {
@@ -283,6 +291,8 @@
                   font-style: normal;
                   font-weight: bold;
                   line-height: normal;
+                  line-height: 22px;
+
               }
               .open {
                   color: #14FF00;
@@ -302,7 +312,6 @@
                   font-family: $main-font;
                   font-size: 1rem;
                   font-style: normal;
-                  font-weight: bold;
                   line-height: normal;
                   cursor: pointer;
                   display: flex;
@@ -313,11 +322,13 @@
                       font-family: $main-font;
                       font-size: 1rem;
                       font-style: normal;
-                      font-weight: bold;
                       line-height: normal;
                       cursor: pointer;
                   }
-  
+                  address {
+                    font-style: normal;
+                    font-weight: 500;
+                }
                   .icon-container {
                       border-radius: 50%;
                       background-color: #0E0E0D;
@@ -346,7 +357,8 @@
                   text-transform: uppercase;
                   cursor: pointer;
                   overflow: hidden;
-                  @include specialBtn(8px, 0px, 1.1rem);
+                  @include specialBtn(7px, 0px, 1.1rem);
+                  padding-top: 10px;
                   .btn-hover-enter-active {
                       transition: 0.4s;
                       transition-delay: 0.2s;

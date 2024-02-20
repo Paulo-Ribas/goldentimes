@@ -1,17 +1,15 @@
 <template>
     <div class="container">
-        <section id="signup">
-            <div class="signup-container">
-                <LoginSignError :errProps="err" v-if="err!== '' "></LoginSignError>
+        <section id="token-form">
+            <div class="token-form-container">
+                <LoginSignError :errProps="err" v-if="err!== '' && !sucess"></LoginSignError>
+                <SucessMessage :sucessProps="message" v-if="sucess"></SucessMessage>
+                <div class="shadow" v-if="sending" ></div>
+                <LoadingSmall v-if="sending"></LoadingSmall>
                 <form @submit.prevent="submit">
                     <h1>goldentimes</h1>
                     <div class="inputs">
                         <div class="name-email">
-                            <label for="name">Nome</label>
-                            <div class="input-container">
-                                <UserIcon></UserIcon>
-                                <input v-model="name" id="name" required name="name" type="text" placeholder="joaozinho123" tabindex="0">
-                            </div>
                             <label for="email">Email</label>
                             <div class="input-container">
                                 <EmailIcon></EmailIcon>
@@ -19,23 +17,8 @@
                             </div>
                         </div>
                         <Bar></Bar>
-                        <div class="passwords">
-                            <label for="password">Senha</label>
-                            <div class="input-container">
-                                <PassIcon></PassIcon>
-                                <input v-model="password" id="password" required name="password" type="password" placeholder="******************">
-                            </div>
-                            <label for="confirmPassword">Confirmar Senha</label>
-                            <div class="input-container">
-                                <PassIcon></PassIcon>
-                                <input v-model="confirmPassword" id="confirmPassword" name="confirmPassword" type="password" placeholder="insira novamente sua senha">
-                            </div>
-                        </div>
                     </div> <!--fim .inputs-->
-                    <div class="forgot">
-                        <RouterLink to="login">Login</RouterLink>
-                    </div>
-                    <input type="submit" @click.prevent="submit" value="register">
+                    <input type="submit" @click.prevent="submit" value="Send Email">
                 </form>
             </div>
         </section>
@@ -43,17 +26,18 @@
 </template>
 
 <script>
-import LoginSignError from '@/components/LoginSignError.vue';
-import Bar from '../components/svgs/Bar'
-import EmailIcon from '@/components/svgs/EmailIcon.vue';
-import PassIcon from '@/components/svgs/PassIcon.vue';
-import UserIcon from '@/components/svgs/UserIcon.vue';
-import { mapActions, mapMutations } from 'vuex';
+    import Bar from '@/components/svgs/Bar.vue'
+    import LoginSignError from '@/components/LoginSignError.vue'
+    import EmailIcon from '@/components/svgs/EmailIcon.vue'
+    import {mapActions} from 'vuex'
+    import LoadingSmall from '@/components/LoadingSmall.vue'
+import SucessMessage from '@/components/SucessMessage.vue'
+    
 export default {
-    components: { Bar, EmailIcon, PassIcon, UserIcon, LoginSignError },
+    components: {Bar, LoginSignError, EmailIcon, LoadingSmall, SucessMessage},
     head(){
         return {
-            title: 'Sign Up',
+            title: 'Request Token',
             meta: [
                 { name: 'viewport', content: 'width=device-width, initial-scale=1' },
                 {name: 'robots', content: 'noindex'}
@@ -62,40 +46,51 @@ export default {
     },
     data(){
         return {
-            name: '',
             email: '',
-            password: '',
             err: '',
-            confirmPassword: '',
-
+            sucess: false,
+            sending: false,
+            message: 'email enviado com sucesso, cheque em alguns instantes'
         }
     },
     methods: {
-        ...mapActions({signup:'signup'}),
-        ...mapMutations({SET_TOKEN:'SET_TOKEN'}),
+        ...mapActions({recoveryPass:'recoveryPassword'}),
         async submit(){
-            if(this.confirmPassword !== this.password) return this.err = 'as senhas não coincidem'
+            if(this.email === '' || this.email === ' ') return this.err = 'digite o email'
+            if(this.sucess) throw {err: 'email já foi enviado'}
             try {
-                let response = await this.signup({name: this.name, email: this.email, password: this.password})
-                console.log(response)
-                this.SET_TOKEN(response.data)
-                this.$router.push('/profile/searchplaces')
-                
+                this.sending = true
+                await this.recoveryPass(this.email)
+                this.err = ''
+                this.sucess = true
+                this.sending = false
             } catch (error) {
+                this.sucess = false
+                this.sending = false
                 this.err = error.err
             }
         }
     }
-
 }
 </script>
 
-<style scoped lang="scss">
-
-  @import '../assets/scss/variables.scss';
-  @import '../assets//scss/buttonsAndInputs.scss';
-
-    h1{
+<style lang="scss" scoped>
+@import '@/assets/scss/variables.scss';
+  @import '@/assets//scss/buttonsAndInputs.scss';
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .shadow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #191918;
+    opacity: 0.7;
+    z-index: 3;
+  }
+h1{
         font-family: $main-font;
         font-size: 3.68138rem;
         font-style: normal;
@@ -108,14 +103,18 @@ export default {
         -webkit-text-fill-color: transparent;
         -webkit-background-clip: text;
         -webkit-text-stroke:   1px transparent;
-    }
-    #signup {
         width: 100%;
-        height: 100%;
+        text-align: center;
+    }
+    #token-form {
+        width: 96%;
+        height: 96%;
+        max-height: 293px;
         display: flex;
         justify-content: center;
         align-items: center;
-        .signup-container{
+        position: relative;
+        .token-form-container{
             display: flex;
             width: 99%;
             height: 99%;
@@ -137,8 +136,8 @@ export default {
                 align-items: center;
                 flex-direction: column;
                 justify-content: center;
+                gap: 23px;
                 .inputs {
-                    margin-top: 25px;
                     display: inline-flex;
                     flex-direction: column;
                     width: 100%;
@@ -167,25 +166,6 @@ export default {
                         }
                     }
 
-                }
-                .forgot {
-                    width: 85%;
-                    max-width: 430px;
-                    font-family: $main-font;
-                    font-size: 0.9rem;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: normal;
-                    display: flex;
-                    justify-content: flex-end;
-                    padding: 0px 5px;
-                    margin: 12px 0px 18px 0px;
-                    a{
-                        color: rgba(232, 232, 232, 0.50);
-                        text-decoration: none;
-                        justify-self: flex-end
-
-                    }
                 }
                 input[type="submit"] {
                     @include formBtn;

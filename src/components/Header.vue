@@ -61,7 +61,7 @@ export default {
                         font-size: 1rem;
                         font-family: $main-font;
                         text-transform: uppercase;
-                        padding: 5px 25px;
+                        padding: 8px 25px 5px 25px;
                     }
                 }
             }

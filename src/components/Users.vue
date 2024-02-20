@@ -93,7 +93,7 @@ export default {
         padding: 5px 10px;
         display: flex;
         justify-content: space-around;
-        margin: 3px 0px;
+        margin: 4px 0px;
         .user-img-name-container {
             flex: 1;
             display: flex;

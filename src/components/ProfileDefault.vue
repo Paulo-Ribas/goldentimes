@@ -76,7 +76,7 @@ export default {
             padding: 5px 0px 30px 0px;
             .sign-out {
                 width: 100%;
-                padding: 6px;
+                padding: 6px 11px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
@@ -92,7 +92,7 @@ export default {
                     font-weight: 700;
                     line-height: normal;
                     text-transform: uppercase;
-                    padding: 1px 13px;
+                    padding: 3px 13px  1px 13px;
                     transition: 0.4s;
                     cursor: pointer;
                     &:hover {
@@ -161,9 +161,6 @@ export default {
                     white-space: pre-wrap;
                     text-wrap: wrap;
                     padding: 0px 3px;
-                    
-
-
 
                 }
             }
@@ -173,7 +170,7 @@ export default {
         }
         @media screen and (max-width: 860px) {
             .profile-img-container  {
-                width: 58% !important;
+                width: 90% !important;
             }
           }
 

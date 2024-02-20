@@ -30,6 +30,9 @@
             </address>
         </li>
         <li @click="copyNumber()">
+            <Transition name="copied">
+            <span class="copy-warn" v-if="copied">Copied!</span>
+            </Transition>
             <div class="icon-container">
                 <PhoneSvg></PhoneSvg>
             </div>
@@ -156,7 +159,8 @@ export default {
             activedName: false,
             addBlackList: 'Black List',
             placesSaved: this.placesSavedProps,
-            placesBlackListed: this.placesBlackListedProps
+            placesBlackListed: this.placesBlackListedProps,
+            copied: false,
         }
     },
     components: { StarYellow, StarTransparent, StarHalf, Image, PhoneSvg, FacebookSvg, WebUri, LocationSvg},
@@ -176,9 +180,14 @@ export default {
             }
         },
         copyNumber(){
+            if(this.phone == '??') return
             let numberTreated = this.phone.replace(/[^\d]+/g, '')
             if(this.copyForWhatsApi) return navigator.clipboard.writeText(`https://api.whatsapp.com/send?phone=${numberTreated}`)
             navigator.clipboard.writeText(numberTreated)
+            this.copied = true
+            setTimeout(() => {
+                this.copied = false
+            }, 400);
         },
         SaveCard(){
             this.$emit('saveCard', this.location)
@@ -260,6 +269,7 @@ export default {
                 font-style: normal;
                 font-weight: bold;
                 line-height: normal;
+                line-height: 22px;
             }
             .open {
                 color: #14FF00;
@@ -279,7 +289,6 @@ export default {
                 font-family: $main-font;
                 font-size: 1rem;
                 font-style: normal;
-                font-weight: bold;
                 line-height: normal;
                 cursor: pointer;
                 display: flex;
@@ -290,9 +299,13 @@ export default {
                     font-family: $main-font;
                     font-size: 1rem;
                     font-style: normal;
-                    font-weight: bold;
                     line-height: normal;
                     cursor: pointer;
+                    font-style: normal;
+                }
+                address {
+                    font-style: normal;
+                    font-weight: 500;
                 }
 
                 .icon-container {
@@ -311,6 +324,7 @@ export default {
                     width: 100%;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    line-height: 21px;
                 }
             }
         }
@@ -323,7 +337,8 @@ export default {
                 text-transform: uppercase;
                 cursor: pointer;
                 overflow: hidden;
-                @include specialBtn(8px, 0px, 1.1rem);
+                @include specialBtn(7px, 0px, 1.1rem);
+                padding-top: 10px;
                 .btn-hover-enter-active {
                     transition: 0.4s;
                     transition-delay: 0.2s;

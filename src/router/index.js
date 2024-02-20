@@ -21,40 +21,50 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/SignUp.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/SignUp/SignUp.vue')
   },
   {
     path:'/login',
     name: 'login',
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/Login/Login.vue')
+  },
+  {
+    path: '/request-token',
+    name: 'requestToken',
+    component: () => import('../views/RequestToken/RequestToken.vue')
+  },
+  {
+    path: '/recovery-password/:token',
+    name: 'recovetPassword',
+    component: () => import('../views/RecoveryPassword/RecoveryPassword.vue')
   },
   {
     path:'/profile',
     name: 'perfil',
     beforeEnter: validateUser,
-    component: () => import('../views/Profile.vue'),
+    component: () => import('../views/Profile/Profile.vue'),
     children: [
       {
         path:'searchplaces',
         name:'search',
-        component:() => import('../views/SearchPlaces.vue')
+        component:() => import('../views/SearchPlaces/SearchPlaces.vue')
       },
       {
         path:'savedplaces',
         name: 'saved',
-        component:() => import('../views/PlacesSaved.vue')
+        component:() => import('../views/PlacesSaved/PlacesSaved.vue')
       },
       {
         path:'blacklist',
         name: 'black',
-        component:() => import('../views/BlackList.vue')
+        component:() => import('../views/BlackList/BlackList.vue')
       },
     ]
   },
   {
     path: '/user/profile/:userId',
     name: 'publicProfile',
-    component: () => import('../views/user/Profile.vue')
+    component: () => import('../views/User/Profile.vue')
   },
   {
     path:'/group/:id',

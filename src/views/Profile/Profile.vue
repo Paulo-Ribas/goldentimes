@@ -197,8 +197,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/scss/variables.scss';
-@import '../assets/scss/imageCenter.scss';
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/imageCenter.scss';
 
 h1{
     color: #FFF;
@@ -210,7 +210,7 @@ h1{
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    padding: 8px 0px;
+    padding: 11px 0px 8px 0px;
     background: $default-gradient;
 }
 .container {

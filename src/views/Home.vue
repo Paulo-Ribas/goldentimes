@@ -176,7 +176,6 @@ main {
         text-transform: uppercase;
         color: $text-color;
         margin-bottom: 125px;
-        font-family: cursive;
     }
 
     h3 {
@@ -246,6 +245,7 @@ main {
             color: $text-color;
             font-size: 3.8rem;
             font-family: $main-font;
+            text-align: center;
         }
         .register {
             display: flex;

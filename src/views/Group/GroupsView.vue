@@ -341,13 +341,14 @@ export default {
         max-height: 29px;
         text-decoration: none;
         transform: translateX(calc(16vw - 138px));
+        padding-top: 6px;
     }
       .members-container {
         display: flex;
         height: fit-content;
         min-height: 200px;
         max-height: 90vh;
-        padding: 14px;
+        padding: 5px 14px 10px;
         width: 100%;
         max-width: 400px;
         flex-direction: column;
@@ -360,6 +361,7 @@ export default {
         .btn-special {
           max-height: 55px;
           width: 100%;
+          margin-bottom: 3px;
           cursor: pointer;
           @include specialBtn(3px, 3px, 1.4rem)
         }
@@ -398,7 +400,7 @@ export default {
     max-width: 450px;
     max-height: 550px;
     background-color: #0E0E0D;
-    padding: 5px;
+    padding: 5px 8px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -418,7 +420,7 @@ export default {
       font-size: 1rem;
       color: $text-color;
       width: 100%;
-      padding: 10px 3px;
+      padding: 13px 13px;
       display: flex;
       justify-content: center;
       position: relative;
@@ -434,7 +436,7 @@ export default {
         outline: none;
         background: #191918;
         border-radius: 20px;
-        padding: 10px 25px 10px 10px;
+        padding: 13px 25px 10px 10px;
         &::placeholder {
           color: $text-color;
         }
@@ -451,7 +453,7 @@ export default {
         position: absolute;
         right: 0;
         top: 50%;
-        transform: translate(calc((16px - 3.150rem) - 5px), -50%);        
+        transform: translate(calc((7px - 3.150rem) - 5px), -50%);        
         cursor: pointer;
       }
       .close {
