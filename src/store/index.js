@@ -65,7 +65,7 @@ export default createStore({
             axios.post(url + 'validate', {}, {headers:{authorization: token}})
             .then(response => {
 
-              if(response.data.token) context.commit('SET_TOKEN',response.data.token)
+              if(response.data.token) context.commit('SET_TOKEN',{token: response.data.token})
 
               context.commit('SET_USER', response.data.user)
               return resolve()
