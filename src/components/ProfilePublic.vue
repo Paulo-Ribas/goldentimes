@@ -96,7 +96,7 @@
                   width: 100%;
                   height: 100%;
                   overflow: hidden;
-                  border-radius: 50%;
+                  clip-path: circle(50%);
                   background-image: $default-gradient;
                   max-width: 235px;
                   max-height: 235px;
@@ -106,7 +106,7 @@
                       @include centerImage(cover, center);
                       width: calc(100% - 6px) !important;
                       height: calc(100% - 6px) !important;
-                      border-radius: 50%;
+                      clip-path: circle(50%);
   
                   }
               }

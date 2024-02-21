@@ -29,7 +29,7 @@ import ProfilePublic from '@/components/ProfilePublic.vue';
          }
  
      },
-     name: "UserProfile",
+     name: "publicProfile",
      data(){
          return {
              user: undefined,

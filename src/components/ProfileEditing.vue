@@ -176,7 +176,7 @@ import LoadingMicro from './LoadingMicro.vue';
               .container-profile-icon-img{
                   width: 100%;
                   height: 100%;
-                  border-radius: 50%;
+                  clip-path: circle(50%);
                   background-image: $default-gradient;
                   max-width: 235px;
                   max-height: 235px;
@@ -193,7 +193,7 @@ import LoadingMicro from './LoadingMicro.vue';
                       width: 100%;
                       height: 100%;
                       overflow: hidden;
-                      border-radius: 50%;
+                      clip-path: circle(50%);
                       background-image: $default-gradient;
                       max-width: 235px;
                       max-height: 235px;
@@ -203,8 +203,7 @@ import LoadingMicro from './LoadingMicro.vue';
                           @include centerImage(cover, center);
                           width: calc(100% - 6px) !important;
                           height: calc(100% - 6px) !important;
-                          border-radius: 50%;
-      
+                          clip-path: circle(50%);
                       }
                   }
                   #file {
@@ -270,29 +269,24 @@ import LoadingMicro from './LoadingMicro.vue';
           }
           @media screen and (max-width: 860px) {
             .container-profile-icon-img {
-                width: 90%;
+                width: 100%;
             }
           }
           @media screen and (max-height: 580px) {
             .container-profile-icon-img{
-                width: 70%  !important;
-                height: 50% !important;
                 max-width: 169px !important;
                 min-width: 110px;
-                min-height: 110px;
-                  border-radius: 50%;
+                clip-path: circle(50%);
                   background-image: $default-gradient;
                   position: relative;
                   margin: 0px auto;
             }
             .profile-img-container {
-                width: 70%  !important;
-                height: 50% !important;
                 max-width: 169px !important;
                 min-width: 110px;
                 min-height: 110px;
                 overflow: hidden;
-                border-radius: 50%;
+                clip-path: circle(50%);
                 background-image: $default-gradient;
                 max-width: 235px;
                 max-height: 235px;

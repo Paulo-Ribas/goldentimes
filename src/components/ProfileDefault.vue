@@ -107,7 +107,7 @@ export default {
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
-                border-radius: 50%;
+                clip-path: circle(50%);
                 background-image: $default-gradient;
                 max-width: 235px;
                 max-height: 235px;
@@ -117,8 +117,7 @@ export default {
                     @include centerImage(cover, center);
                     width: calc(100% - 6px) !important;
                     height: calc(100% - 6px) !important;
-                    border-radius: 50%;
-
+                    clip-path: circle(50%);
                 }
             }
             .name-description-container {
@@ -170,22 +169,16 @@ export default {
         }
         @media screen and (max-width: 860px) {
             .profile-img-container  {
-                width: 90% !important;
+                width: 100% !important;
             }
           }
 
         @media screen and (max-height: 580px) {
             .profile-img-container {
-                width: 70%  !important;
-                height: 50% !important;
                 max-width: 169px !important;
-                min-width: 110px;
-                min-height: 110px;
                 overflow: hidden;
-                border-radius: 50%;
+                clip-path: circle(50%);
                 background-image: $default-gradient;
-                max-width: 235px;
-                max-height: 235px;
                 position: relative;
                 margin: 0px auto;
             }
