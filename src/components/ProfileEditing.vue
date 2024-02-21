@@ -176,7 +176,8 @@ import LoadingMicro from './LoadingMicro.vue';
               .container-profile-icon-img{
                   width: 100%;
                   height: 100%;
-                  clip-path: circle(50%);
+                 /*  clip-path: circle(50%); */
+                 border-radius: 50%;
                   background-image: $default-gradient;
                   max-width: 235px;
                   max-height: 235px;
