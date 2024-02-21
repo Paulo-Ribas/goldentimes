@@ -53,6 +53,7 @@ export default {
             text-align: center;
             gap: 28px;
             padding: 25px;
+            user-select: none;
         }
     }
     .sizeAnimation {

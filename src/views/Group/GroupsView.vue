@@ -363,7 +363,8 @@ export default {
           width: 100%;
           margin-bottom: 3px;
           cursor: pointer;
-          @include specialBtn(3px, 3px, 1.4rem)
+          @include specialBtn(18px, 3px, 1.4rem);
+          padding-bottom: 15px;
         }
       }
 
