@@ -133,7 +133,9 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                   return filter.name === 'Copy WhatsApp Api Link' && filter.selected
               })
               found ? this.copySpecial = true : this.copySpecial = false
-              this.toggleFilter()
+
+              if(!found)  return  this.toggleFilter()
+
           },
           async toggleFilter(){
               let filtersSelecteds = this.filtersList.filter(filter => {
