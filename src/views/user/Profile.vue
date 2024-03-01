@@ -20,10 +20,10 @@ import ProfilePublic from '@/components/ProfilePublic.vue';
      async beforeMount(){
          try {
              this.user = await this.getUser(this.$route.params.userId)
-             console.log(this.user, 'o user')
+             //console.log(this.user, 'o user')
              this.loaded = true
          } catch (error) {
-             console.log(error, 'o erro do catch')
+             //console.log(error, 'o erro do catch')
              this.err = error.err.err || error.message
              this.$router.push({name: 'PageError', params: {error: this.err}})
          }
