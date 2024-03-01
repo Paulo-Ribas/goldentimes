@@ -97,7 +97,7 @@ export default {
     },
   async beforeMount(){
     try {
-      console.log(this.groupID, 'o iddd')
+      //console.log(this.groupID, 'o iddd')
       let group = await this.getGroup(this.groupID)
       this.group = group
       this.categories = await this.getCategories(this.groupID) || []
@@ -106,7 +106,7 @@ export default {
       return
     
     } catch (error) {
-      console.log(error, 'o erro')
+      //console.log(error, 'o erro')
       this.err = error.err
       this.loaded = true
     }
@@ -175,9 +175,9 @@ export default {
         try {
           let category = await this.saveCategory({GroupID: this.groupID, name: $event})
           this.categories.push(category)
-          console.log(this.categories,' está aqui')
+          //console.log(this.categories,' está aqui')
         } catch (error) {
-          console.log(error)
+          //console.log(error)
           this.err = error.err
         }
       },
@@ -208,7 +208,7 @@ export default {
           let newArray = this.categories.filter(filter => filter.ID !== ID)
           this.categories = newArray
         } catch (error) {
-          console.log(error)
+          //console.log(error)
           this.err = error.err
         }
 
@@ -220,7 +220,7 @@ export default {
           this.searching = false
           this.users = response.data.users
         }).catch(err => {
-          console.log(err)
+          //console.log(err)
           this.err = err.err
           this.searching = false
         })
@@ -235,7 +235,7 @@ export default {
         this.membersContextMenu = "0"
       },
       setMembersContextMenuProps($event){
-        console.log('vou setar o contextMenu', $event)
+        //console.log('vou setar o contextMenu', $event)
         this.membersContextMenu = $event
       },
       async invite($event){
@@ -243,7 +243,7 @@ export default {
           ...$event,
           GroupName: this.group.GroupName
         }
-        console.log(invite, 'vou enviar o convite')
+        //console.log(invite, 'vou enviar o convite')
         let groupID = this.groupID
         try {
           let invitedUser = await this.sendUserInvite({invite, groupID})
@@ -265,7 +265,7 @@ export default {
         const payload = {memberID: $event, groupID: this.groupID}
         try {
           const Admins = await this.addAdmin(payload)
-          console.log('vou adicionar o admin', Admins)
+          //console.log('vou adicionar o admin', Admins)
           this.group.Admins = Admins
         } catch (error) {
           this.errMemberActions = error.err

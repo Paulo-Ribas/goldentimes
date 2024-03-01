@@ -60,7 +60,7 @@ export default createStore({
         },
         async validateUser(context, payload){
           let token = payload
-          console.log('chamei a função')
+          //console.log('chamei a função')
           return new Promise((resolve, reject) => {
             axios.post(url + 'validate', {}, {headers:{authorization: token}})
             .then(response => {
@@ -85,7 +85,7 @@ export default createStore({
               let token = response.data.token
               return resolve(token)
             }).catch(err => {
-              console.log(err, 'o erro')
+              //console.log(err, 'o erro')
               let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
               return reject(error)
             })
@@ -95,13 +95,13 @@ export default createStore({
           let token = context.state.Token,
           file = payload,
           axiosHeader = {headers:{authorization: token}}
-                    console.log('o axiosHeader', axiosHeader)
+                    //console.log('o axiosHeader', axiosHeader)
           return new Promise((resolve, reject) => {
             axios.put(`${url}img`, file, axiosHeader).then(response => {
-              console.log(response,' a imageeem')
+              //console.log(response,' a imageeem')
               return resolve(response.data.token)
             }).catch(err => {
-              console.log(err, 'erro')
+              //console.log(err, 'erro')
               let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
               return reject(error)
             })
@@ -113,7 +113,7 @@ export default createStore({
             return new Promise((resolve, reject) => {
               axios.put(`${url}description`, {description}, {headers:{authorization: token}})
               .then(response => {
-                console.log(response)
+                //console.log(response)
                 let token = response.data.token
                 return resolve(token)
               }).catch(err => {
@@ -126,7 +126,7 @@ export default createStore({
           return new Promise((resolve, reject) => {
             axios.put(`${url}recoverypassword`, payload)
             .then(response => {
-              console.log(response)
+              //console.log(response)
               resolve(response)
             }).catch(err => {
               let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
@@ -139,7 +139,7 @@ export default createStore({
           return new Promise((resolve, reject) => {
             axios.post(`${url}request-token`, {email: payload})
             .then(response => {
-              console.log(response)
+              //console.log(response)
               resolve(response)
             }).catch(err => {
               let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
@@ -169,7 +169,7 @@ export default createStore({
       },
       mutations: {
         SET_LOCATIONS(state, payload){
-          console.log('vou setaar', payload)
+          //console.log('vou setaar', payload)
           state.SavedLocations = payload.SavedLocations
           state.BlackListLocations = payload.BlackListLocations
         },
@@ -182,10 +182,10 @@ export default createStore({
         getUserLocations(context){
           let token = context.rootState.user.Token
           let axiosHeader = {headers:{authorization: token}}
-          console.log('seguinte, eu vou fazer isso lol', token)
+          //console.log('seguinte, eu vou fazer isso lol', token)
           return new Promise((resolve, reject) => {
             axios.get(`${url}locations`, axiosHeader).then(response => {
-              console.log(response, 'é isso que vou setar')
+              //console.log(response, 'é isso que vou setar')
               let locations = response.data.currentLocations
               context.commit('SET_LOCATIONS', locations)
               resolve()
@@ -202,7 +202,7 @@ export default createStore({
           return new Promise((resolve, reject) => {
             axios.post(`${url}location`, {location}, axiosHeader).then(response => {
               let locations = response.data.currentLocations
-              console.log('vou salvar isso aqui', locations)
+              //console.log('vou salvar isso aqui', locations)
               context.commit('SET_LOCATIONS', locations)
               resolve()
             }).catch(err => {
@@ -218,7 +218,7 @@ export default createStore({
           return new Promise((resolve, reject) => {
             axios.post(`${url}locationblacklist`, {location}, axiosHeader).then(response => {
               let locations = response.data.currentLocations
-              console.log('vou salvar isso aqui', locations)
+              //console.log('vou salvar isso aqui', locations)
               context.commit('SET_LOCATIONS', locations)
               resolve()
             }).catch(err => {
@@ -231,11 +231,11 @@ export default createStore({
           let {location} = payload
           let token = context.rootState.user.Token
           let headers = {authorization: token}
-          console.log(headers)
+          //console.log(headers)
           return new Promise((resolve, reject) => {
             axios.delete(`${url}location`, {headers, data:{location}}).then(response => {
               let locations = response.data.currentLocations
-              console.log('vou setar isso aqui', locations)
+              //console.log('vou setar isso aqui', locations)
               context.commit('SET_LOCATIONS', locations)
               resolve()
             }).catch(err => {
@@ -248,7 +248,7 @@ export default createStore({
           let {location} = payload
           let token = context.rootState.user.Token
           let headers = {authorization: token}
-          console.log(headers)
+          //console.log(headers)
           return new Promise((resolve, reject) => {
             axios.delete(`${url}locationblacklist`, {headers, data:{location}}).then(response => {
               let locations = response.data.currentLocations
@@ -272,7 +272,7 @@ export default createStore({
           state.Groups = payload
         },
         SET_CURRENT_LOCATIONS_BLACK_LISTED(state, payload){
-          console.log(payload,' o valor do payload ')
+          //console.log(payload,' o valor do payload ')
           state.CurrentGroupBlackListLocations = payload
         },
         UNSET_GROUPS(state){
@@ -321,7 +321,7 @@ export default createStore({
         return new Promise((resolve, reject) => {
           axios.put(`${url}group/${groupID}`, {groupName}, axiosHeader)
           .then(response => {
-            console.log(response)
+            //console.log(response)
             resolve(response.data.groupUpdated)
           }).catch(err => {
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
@@ -331,7 +331,7 @@ export default createStore({
         })
       },
       async leaveGroup(context, payload){
-        console.log('o group id', payload.groupID)
+        //console.log('o group id', payload.groupID)
         let {groupID} = payload
         let token = context.rootState.user.Token,
         headers = {authorization: token}
@@ -340,7 +340,7 @@ export default createStore({
           .then(response => {
             resolve(response.data.groupID)
           }).catch(err => {
-            console.log(err, 'errou')
+            //console.log(err, 'errou')
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -353,10 +353,10 @@ export default createStore({
         return new Promise((resolve, reject) => {
           axios.delete(`${url}group/${groupID}`,{headers:{authorization: token}})
           .then(response => {
-            console.log(response)
+            //console.log(response)
             resolve(response.data.deletedGroup)
           }).catch(err => {
-            console.log(err, 'errou')
+            //console.log(err, 'errou')
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -369,10 +369,10 @@ export default createStore({
 
         return new Promise((resolve, reject) => {
           axios.get(`${url}group/${id}`, axiosHeader).then(response => {
-            console.log(response.data.group, 'o grupo')
+            //console.log(response.data.group, 'o grupo')
             resolve(response.data.group)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -384,10 +384,10 @@ export default createStore({
 
         return new Promise((resolve, reject) => {
           axios.get(`${url}groups/`, axiosHeader).then(response => {
-            console.log(response.data.groups, 'o grupo')
+            //console.log(response.data.groups, 'o grupo')
             resolve(response.data.groups)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -399,10 +399,10 @@ export default createStore({
         axiosHeader = {headers:{authorization: token}}
         return new Promise((resolve, reject) => {
           axios.put(`${url}admin/${groupID}`,{memberID}, axiosHeader).then(response => {
-            console.log(response.data.Admins, 'os ADMINS')
+            //console.log(response.data.Admins, 'os ADMINS')
             resolve(response.data.Admins)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -415,10 +415,10 @@ export default createStore({
         
         return new Promise((resolve, reject) => {
           axios.delete(`${url}admin/${groupID}`,{data:{memberID}, headers}).then(response => {
-            console.log(response.data.Admins, 'Oadmins')
+            //console.log(response.data.Admins, 'Oadmins')
             resolve(response.data.Admins)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -431,10 +431,10 @@ export default createStore({
         
         return new Promise((resolve, reject) => {
           axios.delete(`${url}member/${groupID}`,{data:{memberID}, headers}).then(response => {
-            console.log(response.data.groupAtt, 'o grupo')
+            //console.log(response.data.groupAtt, 'o grupo')
             resolve(response.data.groupAtt)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -451,7 +451,7 @@ export default createStore({
         state.category = payload
       },
       SET_CURRENT_SAVED_LOCATIONS(state, payload){
-        console.log(payload,' o valor do payload ')
+        //console.log(payload,' o valor do payload ')
         state.category.SavedLocations = payload
       },
     },
@@ -462,10 +462,10 @@ export default createStore({
         const {GroupID, name} = payload
         return new Promise((resolve, reject) => {
           axios.post(`${url}category/${GroupID}`, {name}, axiosHeader).then(response => {
-            console.log(response)
+            //console.log(response)
             resolve(response.data.category)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -476,10 +476,10 @@ export default createStore({
         axiosHeader = {headers:{authorization: token}}
         return new Promise((resolve, reject) => {
           axios.get(`${url}categories/${id}`, axiosHeader).then(response => {
-            console.log(response)
+            //console.log(response)
             resolve(response.data.categories)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -491,42 +491,42 @@ export default createStore({
         axiosHeader = {headers:{authorization: token}}
         return new Promise((resolve, reject) => {
           axios.get(`${url}category/${categoryID}/${groupID}`, axiosHeader).then(response => {
-            console.log(response)
+            //console.log(response)
             resolve(response.data.category)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
         })
       },
       async editCategory(context, payload) {
-        console.log('foi a função', payload)
+        //console.log('foi a função', payload)
         const {categoryID, groupID, name} = payload
         let token = context.rootState.user.Token
         let headers = {authorization: token}
         return new Promise((resolve, reject) => {
           axios.put(`${url}categoryname/${groupID}`, {categoryID, name}, {headers}).then(response => {
-            console.log(response)
+            //console.log(response)
             resolve(response.data.category)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
         })
       },
       async deleteCategory(context, payload){
-        console.log('foi a função', payload)
+        //console.log('foi a função', payload)
         const {ID, groupID} = payload
         let token = context.rootState.user.Token
         let headers = {authorization: token}
         return new Promise((resolve, reject) => {
           axios.delete(`${url}category/${ID}/${groupID}`, {headers}).then(response => {
-            console.log(response)
+            //console.log(response)
             resolve(response.data.deleted)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -539,12 +539,12 @@ export default createStore({
         const {groupID, categoryID, location} = payload
         return new Promise((resolve, reject) => {
           axios.post(`${url}location-in-category/${groupID}`, {categoryID, location}, axiosHeader).then(response => {
-            console.log(response)
+            //console.log(response)
             let {currentSavedLocations} = response.data
             context.commit('SET_CURRENT_SAVED_LOCATIONS', currentSavedLocations)
             resolve(currentSavedLocations)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -556,12 +556,12 @@ export default createStore({
         headers = {authorization: token}
         return new Promise((resolve, reject) => {
           axios.delete(`${url}group-location/${categoryID}/${groupID}`, {headers, data:{location}}).then(response => {
-            console.log(response)
+            //console.log(response)
             let {currentSavedLocations} = response.data
             context.commit('SET_CURRENT_SAVED_LOCATIONS', currentSavedLocations)
             resolve({currentSavedLocations})
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -572,10 +572,10 @@ export default createStore({
         let token = context.rootState.user.Token,
         axiosHeader = {headers:{authorization: token}}
         const {groupID, location} = payload
-        console.log('irei fazer a requisição')
+        //console.log('irei fazer a requisição')
         return new Promise((resolve, reject) => {
           axios.post(`${url}group-location-blacklist/${groupID}`, {location}, axiosHeader).then(response => {
-            console.log(response, ' a resposta')
+            //console.log(response, ' a resposta')
             let {currentBlackListLocation} =  response.data
             resolve(currentBlackListLocation)
           }).catch(err => {
@@ -592,7 +592,7 @@ export default createStore({
         return new Promise((resolve, reject) => {
           axios.delete(`${url}group-location-blacklist/${groupID}`, {headers, data:{location}}).then(response => {
             let {currentBlackListLocation} = response.data
-            console.log(response)
+            //console.log(response)
             context.commit('SET_CURRENT_LOCATIONS_BLACK_LISTED', currentBlackListLocation)
             resolve({currentBlackListLocation})
           }).catch(err => {
@@ -610,13 +610,13 @@ export default createStore({
         let token = context.rootState.user.Token,
         axiosHeader = {headers:{authorization: token}}
         const {groupID, invite} = payload
-        console.log('irei fazer a requisição', groupID, invite)
+        //console.log('irei fazer a requisição', groupID, invite)
         return new Promise((resolve, reject) => {
           axios.post(`${url}invite/${groupID}`, {invite}, axiosHeader).then(response => {
-            console.log(response, ' a resposta')
+            //console.log(response, ' a resposta')
             resolve(response.data)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -626,13 +626,13 @@ export default createStore({
       getUserInvites(context){
         let token = context.rootState.user.Token,
         axiosHeader = {headers:{authorization: token}}
-        console.log('irei fazer a requisição')
+        //console.log('irei fazer a requisição')
         return new Promise((resolve, reject) => {
           axios.get(`${url}invites`, axiosHeader).then(response => {
-            console.log(response, ' a resposta')
+            //console.log(response, ' a resposta')
             resolve(response.data.invites)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -642,13 +642,13 @@ export default createStore({
         let token = context.rootState.user.Token,
         axiosHeader = {headers:{authorization: token}}
         const {GroupID, ID = payload.invite.ID, invite} = payload
-        console.log('irei fazer a requisição', payload)
+        //console.log('irei fazer a requisição', payload)
         return new Promise((resolve, reject) => {
           axios.post(`${url}member/${ID}`, {invite, groupID: GroupID}, axiosHeader).then(response => {
-            console.log(response, ' a resposta')
+            //console.log(response, ' a resposta')
             resolve(response.data.inviteID)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })
@@ -658,13 +658,13 @@ export default createStore({
         let token = context.rootState.user.Token,
         headers = {authorization: token}
         const {GroupID, invite} = payload
-        console.log('irei fazer a requisição', payload)
+        //console.log('irei fazer a requisição', payload)
         return new Promise((resolve, reject) => {
           axios.delete(`${url}invite/`, {data:{invite, groupID: GroupID}, headers}).then(response => {
-            console.log(response, ' a resposta')
+            //console.log(response, ' a resposta')
             resolve(response.data.inviteID)
           }).catch(err => {
-            console.log(err)
+            //console.log(err)
             let error = !err.response ?  {err: err.message || 'Network Error'} : err.response.data 
             return reject(error)
           })

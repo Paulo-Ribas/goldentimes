@@ -30,10 +30,10 @@
               let windowWidth = window.innerWidth
               if((value + 200) >= windowWidth) return this.X = (value - 200) + 'px'
               this.X = value + 'px'
-              console.log(this.X)
+              //console.log(this.X)
           },
           Yprops(value){
-              console.log(value, 'vou coisar')
+              //console.log(value, 'vou coisar')
               this.Y = value + 'px'
           }
       },

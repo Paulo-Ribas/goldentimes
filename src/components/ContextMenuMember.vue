@@ -18,7 +18,7 @@
       },
       beforeMount(){
         let windowWidth = window.innerWidth, windowHeight = window.innerHeight
-        console.log(this.Y, this.mousePositionY, windowHeight, (this.mousePositionY + 400))
+        //console.log(this.Y, this.mousePositionY, windowHeight, (this.mousePositionY + 400))
 
         if((this.mousePositionX + 200) >= windowWidth) this.X = (this.X - 200) + 'px'
         if((this.mousePositionY + 400) >= windowHeight) this.Y = (this.Y - 400) + 'px'
@@ -30,10 +30,10 @@
               let windowWidth = window.innerWidth
               if((value + 200) >= windowWidth) return this.X = (value - 200) + 'px'
               this.X = value + 'px'
-              console.log(this.X)
+              //console.log(this.X)
           },
           Yprops(value){
-              console.log(value, 'vou coisar')
+              //console.log(value, 'vou coisar')
               this.Y = value + 'px'
           }
       },

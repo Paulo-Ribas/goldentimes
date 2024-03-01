@@ -77,7 +77,7 @@ export default {
             if(this.confirmPassword !== this.password) return this.err = 'as senhas não coincidem'
             try {
                 let response = await this.signup({name: this.name, email: this.email, password: this.password})
-                console.log(response)
+                //console.log(response)
                 this.SET_TOKEN(response.data)
                 this.$router.push('/profile/searchplaces')
                 

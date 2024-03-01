@@ -19,10 +19,10 @@ export default {
     },
     beforeMount(){
         let windowWidth = window.innerWidth, windowHeight = window.innerHeight
-        console.log(this.X, this.mousePositionY, windowHeight, (this.mousePositionY + 400))
+        //console.log(this.X, this.mousePositionY, windowHeight, (this.mousePositionY + 400))
         if((this.mousePositionX + 200) >= windowWidth) this.X = (this.$props.Xprops - 200) + 'px'
         if((this.mousePositionY + this.$props.Yprops) >= windowHeight) this.Y = (this.$props.Yprops - (this.$props.Yprops * 2)) + 'px'
-        console.log( '         ', this.X)
+        //console.log( '         ', this.X)
 
 
     },
@@ -31,7 +31,7 @@ export default {
             this.X = value + 'px'
         },
         Yprops(value){
-            console.log(value, 'vou coisar')
+            //console.log(value, 'vou coisar')
             this.Y = value + 'px'
         }
     },

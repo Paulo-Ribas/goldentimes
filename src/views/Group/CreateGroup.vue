@@ -67,7 +67,7 @@ export default {
             try {
                 let groups = await this.saveGroup(this.name)
                 this.groups = groups
-                console.log(groups,'o grupoo')
+                //console.log(groups,'o grupoo')
                 this.name = ''
             } catch (error) {
                 this.err = error.err
@@ -77,7 +77,7 @@ export default {
         async editGroup(context){
             try {
                 let groupUpdated = await this.updateGroupName(context)
-                console.log('atualizei ele, ', groupUpdated)
+                //console.log('atualizei ele, ', groupUpdated)
                 this.name = ''
                 this.err = ''
                 let newArray = this.groups.map(group => {
@@ -90,7 +90,7 @@ export default {
             } catch (error)    {
                 this.err = error.err
                 this.name = ''
-                console.log(error)
+                //console.log(error)
             }
         },
         async deleteGroupFromUser(id){
@@ -99,11 +99,11 @@ export default {
                 let newArray = this.groups.filter(group => {
                      return group.GroupID !== id
                 })
-                console.log(newArray.length, this.groups.length)
+                //console.log(newArray.length, this.groups.length)
                 this.groups = newArray
                 this.err = ''
             } catch (error) {
-                console.log(error)
+                //console.log(error)
                 this.err = error.err
             }
         },
@@ -115,7 +115,7 @@ export default {
                 })
                 this.groups = newArray
             } catch (error) {
-                console.log(error)
+                //console.log(error)
                 this.err = error.err
             }
         },

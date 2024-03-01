@@ -68,7 +68,7 @@ export default {
                 this.$router.push('/profile/searchplaces')
                 
             } catch (error) {
-                console.log(error)
+                //console.log(error)
                 this.err = error.err
             }
         }

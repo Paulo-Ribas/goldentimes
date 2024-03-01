@@ -145,7 +145,7 @@
                   this.isLocationBlackListed(this.locations)
                   this.searching = false
               }).catch(err => {
-                  console.log(err)
+                  //console.log(err)
                   this.err = err.response.data.err
                   this.searching = false
               })
@@ -174,12 +174,12 @@
             },
           async savePlace($event){
               try {
-                  console.log($event,'o eventou')
+                  //console.log($event,'o eventou')
                   await this.saveLocation({groupID: this.groupID, categoryID:this.categoryID, location: $event})
                   this.isLocationSaved(this.locations)
               }
               catch(error){
-                  console.log(error, ' o erro')
+                  //console.log(error, ' o erro')
                   this.err = error.err
               }
           }

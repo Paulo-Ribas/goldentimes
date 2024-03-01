@@ -70,7 +70,7 @@ export default {
 
         },
         IsOwner(){
-            console.log(this.group.Leader, this.member.id)
+            //console.log(this.group.Leader, this.member.id)
             if(!this.group) return false
             return this.group.Leader === this.member.id
         },

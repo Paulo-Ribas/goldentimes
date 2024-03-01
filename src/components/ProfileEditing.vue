@@ -93,7 +93,7 @@ import LoadingMicro from './LoadingMicro.vue';
                 this.SET_TOKEN({token: token})
                 setTimeout(async () =>{ 
                     try {
-                        console.log('vou validar', token)
+                        //console.log('vou validar', token)
                         await this.validateUser('Bearer ' + token)
                         this.backToProfileDefault()
 

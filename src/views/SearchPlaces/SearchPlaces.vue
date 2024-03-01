@@ -142,7 +142,7 @@ export default {
                 this.isLocationBlackListed(this.locations)
                 this.searching = false
             }).catch(err => {
-                console.log(err)
+                //console.log(err)
                 this.err = err.response.data.err
             })
         },
@@ -170,7 +170,7 @@ export default {
           },
         async savePlace($event){
             try {
-                console.log($event,'o eventou')
+                //console.log($event,'o eventou')
                 await this.saveLocation({location: $event})
                 this.isLocationSaved(this.locations)
             }

@@ -17,7 +17,7 @@
 export default {
     name:'Users-',
     mounted(){
-        console.log(this.Leader, this.user.ID, this.isLeader)
+        //console.log(this.Leader, this.user.ID, this.isLeader)
     },
     props: {
         userProps: Object,
@@ -51,7 +51,7 @@ export default {
             let found = this.user.InvitesRecived.find(filter => {
                  return filter.groupID === this.groupID
             })
-            console.log(this.user, this.invited)
+            //console.log(this.user, this.invited)
             if(!found) found = this.invited.find(filter => filter.groupID === this.groupID && filter.userID === this.user.ID)
             if(found) return false
             return true

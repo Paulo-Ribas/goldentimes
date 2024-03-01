@@ -58,7 +58,7 @@ export default {
             this.$emit('editGroup', {groupName: this.text, groupID: this.id})
         },
         deleteGroup(){
-            console.log(this.id, 'p~sajdpsakk')
+            //console.log(this.id, 'p~sajdpsakk')
             this.$emit('deleteGroupFromUser', this.id)
         },
         goToGroup(){

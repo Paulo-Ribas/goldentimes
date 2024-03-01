@@ -42,7 +42,7 @@ export default {
             this.$emit('pushToRoute', $event)
         },
         deleteCategory($event){
-          console.log('vou emitir lol', $event)
+          //console.log('vou emitir lol', $event)
             this.$emit('deleteCategory', $event)
         },
         editCategory(){

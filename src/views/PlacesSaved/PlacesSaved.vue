@@ -104,7 +104,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           deleteLocation: 'deleteLocation', addLocationToBlackList: 'addLocationToBlackList'
         }),
         setResponsive(value = this.$screen.width){
-          console.log(value)
+          //console.log(value)
             if(value <= 860) return this.mobile = true
             this.mobile = false
             document.querySelector('.container').scrollTop = 0
@@ -170,7 +170,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                 if(webSite) {
                     newPlaces = this.getLocationsWithSites(newPlaces)
                 }
-                console.log(newPlaces, 'funcionou')
+                //console.log(newPlaces, 'funcionou')
                 return this.locations = newPlaces
              }
             catch(err){
@@ -205,7 +205,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
             }
             return new Promise((resolve, reject) => {
                 resolve({openNow, onlyWhats, facebook, webSite, phone})
-                console.log(reject)
+                //console.log(reject)
                
             })
           },
@@ -245,7 +245,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           },
           async deleteUserCard($event){
               try {
-                  console.log($event,'o eventou')
+                  //console.log($event,'o eventou')
                   await this.deleteLocation({location: $event})
                   this.isLocationSaved(this.locations)
                   this.isLocationBlackListed(this.locations)
@@ -267,7 +267,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           },
           
     getLocationsOpeneds(places){
-        console.log('veio aquieeee', places)
+        //console.log('veio aquieeee', places)
       try {
         return places.filter(filter => {
           if(!filter.regularOpeningHours) return false

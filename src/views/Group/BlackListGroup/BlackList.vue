@@ -66,7 +66,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           this.locationStore.CurrentGroupBlackListLocations = BlackListLocations
           this.loaded = true     
         } catch (error) {
-          console.log(error)
+          //console.log(error)
           this.err = error.err
         }
       },
@@ -176,11 +176,11 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                 if(webSite) {
                     newPlaces = this.getLocationsWithSites(newPlaces)
                 }
-                console.log(newPlaces, 'funcionou')
+                //console.log(newPlaces, 'funcionou')
                 return this.locations = newPlaces
              }
             catch(err){
-              console.log('deu erro', err)
+              //console.log('deu erro', err)
                 throw err
             }
           },
@@ -238,7 +238,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
             this.locations = newArray.filter(filter => filter.saved)
         },
           async isLocationBlackListed(locations){
-            console.log(this.locationStore)
+            //console.log(this.locationStore)
               if(this.locationStore.CurrentGroupBlackListLocations.length < 1) return this.locations = []
               let newArray = locations.filter(location => {
                   let found = this.locationStore.CurrentGroupBlackListLocations.find(filter => {
@@ -259,7 +259,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                 this.isLocationBlackListed(this.locations)
                 
             } catch (error) {
-              console.log(error)
+              //console.log(error)
                 if(!error.err) error.err = 'ocorreu um erro'
                 this.err = error.err
             }
@@ -321,7 +321,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
       }
     },
     getLocationsWithSites(places) {
-      console.log(places, 'os lugares')
+      //console.log(places, 'os lugares')
       try {
         return places.filter(filter => {
           if(!filter.websiteUri) return false
@@ -329,7 +329,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
         })
         
       } catch (error) {
-        console.log('o erro aqui', error)
+        //console.log('o erro aqui', error)
         throw {err: 'ocorreu um erro'}
       }
     }

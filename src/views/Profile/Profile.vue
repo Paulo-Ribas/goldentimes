@@ -69,7 +69,7 @@ export default {
             await this.setGroups()
             this.loaded = true
         } catch (error) {
-            console.log(error)
+            //console.log(error)
             this.err = error.err
         }
 
@@ -160,7 +160,7 @@ export default {
             this.editUserProfile = false
         },
         async accepted($event){
-            console.log('o objeto', $event)
+            //console.log('o objeto', $event)
             let invite = $event
             let {GroupID} = $event
             try {
@@ -172,18 +172,18 @@ export default {
                 this.setGroups()
                 if(this.userInvites.length === 0) return  this.closeNotifications()
             } catch (error) {
-                console.log(error)
+                //console.log(error)
                 this.err = error.err
             }
         },
         async refused($event) {
-            console.log('o objeto', $event)
+            //console.log('o objeto', $event)
             let invite = $event
             let {GroupID} = $event
             try {
                 let acceptedId = await this.refuseInvite({invite, GroupID})
                 let newArray = this.userInvites.filter(filter => {
-                    console.log(filter.ID, acceptedId)
+                    //console.log(filter.ID, acceptedId)
                     return filter.ID !== acceptedId
                 })
                 this.userInvites = newArray

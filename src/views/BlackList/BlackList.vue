@@ -174,7 +174,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                 if(webSite) {
                     newPlaces = this.getLocationsWithSites(newPlaces)
                 }
-                console.log(newPlaces, 'funcionou')
+                //console.log(newPlaces, 'funcionou')
                 return this.locations = newPlaces
              }
             catch(err){
@@ -209,7 +209,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
             }
             return new Promise((resolve, reject) => {
                 resolve({openNow, onlyWhats, facebook, webSite, phone})
-                console.log(reject)
+                //console.log(reject)
                
             })
           },

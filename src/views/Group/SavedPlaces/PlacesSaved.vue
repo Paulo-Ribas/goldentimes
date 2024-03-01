@@ -65,7 +65,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           this.SET_STATE(category)
           this.categoryName  = category.Name
           this.isLocationSaved(this.locationStore.SavedLocations)
-          console.log(this.locationStore.SavedLocations, 'locações salvas')
+          //console.log(this.locationStore.SavedLocations, 'locações salvas')
           this.isLocationBlackListed(this.locationStore.SavedLocations)
           //await this.isLocationBlackListed(this.locationStore.SavedLocations)
           this.loaded = true
@@ -175,7 +175,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                 if(webSite) {
                     newPlaces = this.getLocationsWithSites(newPlaces)
                 }
-                console.log(newPlaces, 'funcionou')
+                //console.log(newPlaces, 'funcionou')
                 return this.locations = newPlaces
              }
             catch(err){
@@ -210,7 +210,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
             }
             return new Promise((resolve, reject) => {
                 resolve({openNow, onlyWhats, facebook, webSite, phone})
-                console.log(reject)
+                //console.log(reject)
                
             })
           },
@@ -241,7 +241,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
               if(this.group.CurrentGroupBlackListLocations.length < 1) return
               let newArray = locations.filter(location => {
                 let found = this.group.CurrentGroupBlackListLocations.find(filter => {
-                    console.log(location.googleMapsUri === filter.googleMapsUri)
+                    //console.log(location.googleMapsUri === filter.googleMapsUri)
                       return filter.googleMapsUri === location.googleMapsUri
                   })
                   if(found) return false
@@ -251,7 +251,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           },
           async deleteUserCard($event){
               try {
-                  console.log($event,'o eventou')
+                  //console.log($event,'o eventou')
                   let {groupID, categoryID} = this
                   await this.deleteLocation({location: $event, groupID, categoryID})
                   this.isLocationSaved(this.locations)
@@ -264,9 +264,9 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           async addPlaceToBlackList($event) {
             const groupID = this.groupID
               try {
-                console.log('em teoria vou adicionar o coisinha aqui', $event)
+                //console.log('em teoria vou adicionar o coisinha aqui', $event)
                 let blackListUpdated = await this.addLocationToGroupBlackList({location: $event, groupID})
-                console.log(blackListUpdated, 'só vendo o que é o blacklistupdated')
+                //console.log(blackListUpdated, 'só vendo o que é o blacklistupdated')
                 this.SET_CURRENT_LOCATIONS_BLACK_LISTED(blackListUpdated)
                 this.isLocationSaved(this.locations)
                 this.isLocationBlackListed(this.locations)
@@ -278,7 +278,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           },
           
     getLocationsOpeneds(places){
-        console.log('veio aquieeee', places)
+        //console.log('veio aquieeee', places)
       try {
         return places.filter(filter => {
           if(!filter.regularOpeningHours) return false

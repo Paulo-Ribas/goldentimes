@@ -192,7 +192,7 @@
             }, 400);
         },
           toggleSavedBtn(){
-            console.log('isso esta vindo aqui?')
+            //console.log('isso esta vindo aqui?')
             if(this.saved) {
                 this.savedBtn = this.savedBtn === 'Saved' ?  'unSave' : 'Saved'
                 return
@@ -208,7 +208,7 @@
               this.$emit('saveCard', this.location)
           },
           deleteCard(){
-            console.log('bora ver!')
+            //console.log('bora ver!')
             if(this.savedBtn === 'Saved') return this.toggleSavedBtn()
               this.$emit('deleteCard', this.location)
             this.toggleSavedBtn()
