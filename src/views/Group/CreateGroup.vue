@@ -3,7 +3,10 @@
         <div class="container">
             <div class="groups-container">
                 <span class="error">{{err}}</span>
-                <MyForm placeholderProps="Group Name" @submitForm="createGroup($event)"/>
+                <div class="form-and-return-container">
+                    <MyForm placeholderProps="Group Name" @submitForm="createGroup($event)"/>
+                    <ReturnIcon @click="returnToProfile()"></ReturnIcon>
+                </div>
                 <Groups @deleteGroupFromUser="deleteGroupFromUser($event)" @editGroup="editGroup($event)" @leaveGroup="leaveTheGroup($event)" v-for="group in groups" :key="group.GroupID" :idProps="group.GroupID" :nameProps="group.GroupName" :leaderProps="group.Leader"></Groups>
             </div>
         </div>
@@ -15,6 +18,7 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 import Groups from '@/components/Groups.vue'
 import MyForm from '@/components/MyForm.vue'
+import ReturnIcon from '@/components/svgs/ReturnIcon.vue'
 export default {
     head(){
         return {
@@ -46,7 +50,7 @@ export default {
             this.groupsDefault = value
         }
     },
-    components:{ Groups, MyForm },
+    components:{ Groups, MyForm, ReturnIcon },
     computed:{
         ...mapState({user: state => state.user, userGroups: state => state.groups}),
         groups:{
@@ -127,6 +131,9 @@ export default {
                 this.err = error.err
             }
         },
+        returnToProfile(){
+            this.$router.push('/profile/searchplaces')
+        }
     }
 }
 </script>
@@ -141,6 +148,16 @@ export default {
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            .form-and-return-container {
+                width: 90%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-right: 5px;
+                svg {
+                    cursor: pointer;
+                }
+            }
         }
     }
     .groups-container {

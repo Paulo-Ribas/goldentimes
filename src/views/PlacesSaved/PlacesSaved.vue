@@ -17,15 +17,21 @@
       </form>
       <LoadingSmall v-if="!loaded"></LoadingSmall>
       <div class="cards-container" v-if="loaded && !mobile">
-          <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
+        <span class="amount">
+          {{ locations.length }} / {{locationStore.SavedLocations.length}}
+        </span>
+          <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial" :openWhatsApiLinkProps="openWhatsApi"
           :placesSavedProps="true"
           @deleteCard="deleteUserCard($event)"
           @addBlackListCard="addPlaceToBlackList($event)"
           />
       </div>
 
-      <div class="cards-container" v-if="!searching && mobile">
-        <LocationCardMobile v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
+      <div class="cards-container" v-if="loaded && mobile">
+        <span class="amount">
+          {{ locations.length }} / {{locationStore.SavedLocations.length}}
+        </span>
+        <LocationCardMobile v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial" :openWhatsApiLinkProps="openWhatsApi"
           :placesSavedProps="true"
           @deleteCard="deleteUserCard($event)"
           @addBlackListCard="addPlaceToBlackList($event)"
@@ -73,7 +79,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
               filters: false,
               filtersList: [ { name: 'PhoneNumber', selected: false, apiFilter: 'phone' },
               {name:'Only Whats', selected: false, apiFilter:'onlyWhats'},
-              { name: 'Reviews', selected: false, googleFilter:'places.reviews' },
+              { name: 'Open WhatsApp Api Link', selected: false, apiFilter:'openWhatsApi' },
               { name: 'Facebook', selected: false, apiFilter: 'facebook'},
               { name: 'Copy WhatsApp Api Link', selected: false, apiFilter: 'copyOnlyWhats'},
               { name: 'Open Now', selected: false, apiFilter: 'openNow' },
@@ -82,6 +88,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
               apiFiltersSelecteds: [],
               locations: [],
               copySpecial: undefined,
+              openWhatsApi: undefined,
               loaded: false,
               err: '',
               mobile: false,
@@ -107,7 +114,6 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           //console.log(value)
             if(value <= 860) return this.mobile = true
             this.mobile = false
-            document.querySelector('.container').scrollTop = 0
       },
           filterSelected(filter){
               let newFiltersList = this.filtersList.map(obj => {
@@ -119,12 +125,14 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                   }
                   return obj
               })
-              this.filtersList = newFiltersList
-              let found = this.filtersList.find(filter => {
-                  return filter.name === 'Copy WhatsApp Api Link' && filter.selected
-              })
-              found ? this.copySpecial = true : this.copySpecial = false
-              this.toggleFilter()
+            this.filtersList = newFiltersList
+            let foundCopy = this.filtersList.find(filter => filter.name === 'Copy WhatsApp Api Link' && filter.selected )
+            let foundOpen = this.filtersList.find(filter => filter.name === 'Open WhatsApp Api Link' && filter.selected)
+
+            foundCopy ? this.copySpecial = true : this.copySpecial = false
+            foundOpen ? this.openWhatsApi = true : this.openWhatsApi = false
+
+            this.toggleFilter()
           },
           async toggleFilter(){
             try {
@@ -213,7 +221,8 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
               document.querySelector('input[type="submit"]').click()
           },
           search(){
-            if(this.text == '' || this.text ==' ') return 
+            if(this.text === '' || this.text.search(/[a-z]/i) < 0 ) return
+
             this.locations = this.locationStore.SavedLocations.filter(filter => {
               return filter.displayName.text.toLowerCase().includes(this.text.toLowerCase()) 
             || filter.formattedAddress.toLowerCase().includes(this.text.toLowerCase())
@@ -426,6 +435,16 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           align-items: center;
           justify-content: center;
           padding: 43px 0px 33px;
+          position: relative;
+
+          .amount {
+            font-family: $main-font;
+            color: $gold;
+            font-size: 1rem;
+            position: absolute;
+            right:  6%;
+            top: 4%;
+          }
       }
   
       .filters-enter-active, .filters-leave-active {
@@ -437,11 +456,11 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
       }
       .filters-enter-to {
           opacity: 1;
-          transform: translate(-50%, 100%);
+          transform: translate(-50%, 25%);
       }
       .filters-leave-from {
           opacity: 1;
-          transform: translate(-50%, 100%);
+          transform: translate(-50%, 25%);
   
       }
       .filters-leave-to {

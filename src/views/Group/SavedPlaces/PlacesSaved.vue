@@ -17,7 +17,10 @@
       </form>
       <LoadingSmall v-if="!loaded"></LoadingSmall>
       <div class="cards-container" v-if="loaded && !mobile">
-          <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
+        <span class="amount">
+          {{ locations.length }} / {{locationStore.SavedLocations.length - amountBlackListed}}
+        </span>
+          <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial" :openWhatsApiLinkProps="openWhatsApi"
           :placesSavedProps="true"
           @deleteCard="deleteUserCard($event)"
           @addBlackListCard="addPlaceToBlackList($event)"
@@ -25,7 +28,10 @@
       </div>
 
       <div class="cards-container" v-if="loaded && mobile">
-          <LocationCardMobile v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
+        <span class="amount">
+          {{ locations.length }} / {{locationStore.SavedLocations.length - amountBlackListed}}
+        </span>
+          <LocationCardMobile v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial" :openWhatsApiLinkProps="openWhatsApi"
           :placesSavedProps="true"
           @deleteCard="deleteUserCard($event)"
           @addBlackListCard="addPlaceToBlackList($event)"
@@ -66,8 +72,10 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           this.categoryName  = category.Name
           this.isLocationSaved(this.locationStore.SavedLocations)
           //console.log(this.locationStore.SavedLocations, 'locações salvas')
-          this.isLocationBlackListed(this.locationStore.SavedLocations)
+         this.isLocationBlackListed(this.locationStore.SavedLocations)
           //await this.isLocationBlackListed(this.locationStore.SavedLocations)
+          this.originalLocations = this.locations
+          this.amountBlackListed = this.locationStore.SavedLocations.length - this.locations.length
           this.loaded = true
         } catch (error) {
           this.err = error.err
@@ -81,7 +89,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
               groupID: this.$route.params.groupID,
               filtersList: [ { name: 'PhoneNumber', selected: false, apiFilter: 'phone' },
               {name:'Only Whats', selected: false, apiFilter:'onlyWhats'},
-              { name: 'Reviews', selected: false, googleFilter:'places.reviews' },
+              { name: 'Open WhatsApp Api Link', selected: false, apiFilter:'openWhatsApi' },
               { name: 'Facebook', selected: false, apiFilter: 'facebook'},
               { name: 'Copy WhatsApp Api Link', selected: false, apiFilter: 'copyOnlyWhats'},
               { name: 'Open Now', selected: false, apiFilter: 'openNow' },
@@ -89,11 +97,14 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
               googleFiltersSelecteds: [],
               apiFiltersSelecteds: [],
               locations: [],
+              originalLocations: [],
               copySpecial: undefined,
+              openWhatsApi: undefined,
               loaded: false,
               err: '',
               categoryName: '',
               mobile: false,
+              amountBlackListed: 0,
               
           }
       },
@@ -128,13 +139,14 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                   }
                   return obj
               })
-              this.filtersList = newFiltersList
-              let found = this.filtersList.find(filter => {
-                  return filter.name === 'Copy WhatsApp Api Link' && filter.selected
-              })
-              found ? this.copySpecial = true : this.copySpecial = false
+            this.filtersList = newFiltersList
+            let foundCopy = this.filtersList.find(filter => filter.name === 'Copy WhatsApp Api Link' && filter.selected )
+            let foundOpen = this.filtersList.find(filter => filter.name === 'Open WhatsApp Api Link' && filter.selected)
 
-              if(!found)  return  this.toggleFilter()
+            foundCopy ? this.copySpecial = true : this.copySpecial = false
+            foundOpen ? this.openWhatsApi = true : this.openWhatsApi = false
+
+            this.toggleFilter()
 
           },
           async toggleFilter(){
@@ -176,7 +188,8 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                     newPlaces = this.getLocationsWithSites(newPlaces)
                 }
                 //console.log(newPlaces, 'funcionou')
-                return this.locations = newPlaces
+                this.isLocationSaved(newPlaces)
+                this.isLocationBlackListed(this.locations)
              }
             catch(err){
                 throw err
@@ -218,12 +231,14 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
               document.querySelector('input[type="submit"]').click()
           },
           search(){
-            if(this.text == '' || this.text ==' ') return 
-            this.locations = this.locationStore.SavedLocations.filter(filter => {
+            if(this.text === '' || this.text.search(/[a-z]/i) < 0 ) return this.isLocationBlackListed(this.locationStore.SavedLocations)
+
+            let locations = this.locationStore.SavedLocations.filter(filter => {
               return filter.displayName.text.toLowerCase().includes(this.text.toLowerCase()) 
             || filter.formattedAddress.toLowerCase().includes(this.text.toLowerCase())
             })
-            return this.isLocationSaved(this.locations)
+            this.isLocationSaved(locations)
+            this.isLocationBlackListed(locations)
           },
           async isLocationSaved(locations){
             if(this.locationStore.SavedLocations.length < 1) return this.locations = []
@@ -241,12 +256,15 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
               if(this.group.CurrentGroupBlackListLocations.length < 1) return
               let newArray = locations.filter(location => {
                 let found = this.group.CurrentGroupBlackListLocations.find(filter => {
-                    //console.log(location.googleMapsUri === filter.googleMapsUri)
                       return filter.googleMapsUri === location.googleMapsUri
                   })
-                  if(found) return false
+                  if(found) {
+                    return false
+                  }
                   return true
               })
+              console.log(locations.length, newArray.length, (this.locationStore.SavedLocations.length - newArray.length))
+              this.amountBlackListed = this.locationStore.SavedLocations.length - this.originalLocations.length
               this.locations = newArray
           },
           async deleteUserCard($event){
@@ -254,6 +272,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                   //console.log($event,'o eventou')
                   let {groupID, categoryID} = this
                   await this.deleteLocation({location: $event, groupID, categoryID})
+                  this.originalLocations--
                   this.isLocationSaved(this.locations)
                   this.isLocationBlackListed(this.locations)
               }
@@ -268,6 +287,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                 let blackListUpdated = await this.addLocationToGroupBlackList({location: $event, groupID})
                 //console.log(blackListUpdated, 'só vendo o que é o blacklistupdated')
                 this.SET_CURRENT_LOCATIONS_BLACK_LISTED(blackListUpdated)
+                this.originalLocations--
                 this.isLocationSaved(this.locations)
                 this.isLocationBlackListed(this.locations)
                 
@@ -437,6 +457,15 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
           align-items: center;
           justify-content: center;
           padding: 43px 0px 33px;
+          position: relative;
+          .amount {
+            font-family: $main-font;
+            color: $gold;
+            font-size: 1rem;
+            position: absolute;
+            right:  6%;
+            top: 4%;
+          }
       }
   
       .filters-enter-active, .filters-leave-active {
@@ -448,11 +477,11 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
       }
       .filters-enter-to {
           opacity: 1;
-          transform: translate(-50%, 100%);
+          transform: translate(-50%, 25%);
       }
       .filters-leave-from {
           opacity: 1;
-          transform: translate(-50%, 100%);
+          transform: translate(-50%, 25%);
   
       }
       .filters-leave-to {

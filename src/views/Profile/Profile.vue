@@ -141,7 +141,8 @@ export default {
             this.UNSET_CURRENT_GROUP_BLACK_LIST_LOCATIONS()
             this.$router.push('/login')
         },
-        bellClicked(){
+        async bellClicked(){
+            this.userInvites = await this.getUserInvites()
             this.showNotifications = true
             this.showUserProfile = false
         },

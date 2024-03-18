@@ -291,7 +291,7 @@ export default {
   #categories {
     width: 100%;
     height: 100vh;
-    padding-top: 4%;
+    padding-top: 3%;
     .dark-background {
       background-color: #0E0E0D;
       opacity: 0.7;
@@ -304,13 +304,14 @@ export default {
     .container {
       display: flex;
       height: calc(100vh - 4%);
+      justify-content: center;
     }
     .categories {
       width: 90%;
       max-width: 600px;
       flex-direction: column;
       display: flex;
-      height: 91%;
+      height: 96%;
       gap: 10px;
       flex: 1.3;
       padding: 0px 8px;
@@ -324,7 +325,7 @@ export default {
         flex-direction: column;
         gap: 10px;
         overflow-y: auto;
-        padding-top: 5px;
+        padding-top: 0px;
       }
     }
     .members {
@@ -333,6 +334,7 @@ export default {
       flex-direction: column;
       align-items: center;
       padding-top: 22px;
+      max-width: 600px;
 
       .return {
         @include specialBtn(4px, 50px, 1rem);

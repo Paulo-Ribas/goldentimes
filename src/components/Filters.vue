@@ -38,10 +38,12 @@ export default {
         gap: 8px;
         width: 100%;
         position: absolute;
+        justify-content: center;
         top: 100%;
         left: 50%;
         flex-wrap: wrap;
-        transform: translate(-50%, 150%);
+        transform: translate(-50%, 15%);
+        z-index: 2;
         .filter-name {
             border-radius: 40px;
             background: #191918;
@@ -49,6 +51,7 @@ export default {
             font-size: 1rem;
             font-family: $main-font;
             color: $text-color;
+            display: flex;
             cursor: pointer;
             &:hover {
                 color: $gold;
@@ -65,7 +68,7 @@ export default {
             top: 50%;
             left: 50%;
             flex-wrap: wrap;
-            transform: translate(-50%, 90%);
+            transform: translate(-50%, 50%);
         }
     }
     

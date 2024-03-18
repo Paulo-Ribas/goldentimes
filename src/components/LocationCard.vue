@@ -4,7 +4,7 @@
         <Image></Image>
     </a>
     <div class="basic-informations">
-        <h2 :class="{'actived-name':activedName}" @click="activedName = true">{{locationName}}</h2>
+        <h2 :class="{'actived-name':activedName}" @click="activedName = !activedName">{{locationName}}</h2>
         <span>Opens at <time :datetime="`${openHour}:${openMinutes}`">{{openHour}}:{{openMinutes }}</time></span>
     </div>
     <div class="rating-and-openNow">
@@ -29,7 +29,7 @@
                 {{locationAddress}}
             </address>
         </li>
-        <li @click="copyNumber()">
+        <li @click="copyNumber()" v-if="!openWhatsApiLink">
             <Transition name="copied">
             <span class="copy-warn" v-if="copied">Copied!</span>
             </Transition>
@@ -37,6 +37,12 @@
                 <PhoneSvg></PhoneSvg>
             </div>
             {{phone}}
+        </li>
+        <li v-if="openWhatsApiLink">
+            <div class="icon--container">
+                <PhoneSvg> </PhoneSvg>
+            </div>
+            <a target="_blank" :href="`https://api.whatsapp.com/send?phone=${numberTreated}`">{{phone}}</a>
         </li>
         <li v-if="facebook" class="website">
             <div class="icon-container">
@@ -68,9 +74,9 @@
                 <span :key="addBlackList">{{addBlackList}}</span>
             </Transition>
         </button>
-        <button class="special-btn" v-if="placesBlackListed" @mouseenter="addBlackList = 'remove'" @mouseleave="addBlackList = 'Black Listed'" @click="removeBlackListCard()">
+        <button class="special-btn" v-if="placesBlackListed" @mouseenter="blackListed = 'remove'" @mouseleave="blackListed = 'Black Listed'" @click="removeBlackListCard()">
             <Transition name="btn-hover">
-                <span :key="addBlackList">{{addBlackList}}</span>
+                <span :key="blackListed">{{blackListed}}</span>
             </Transition>
         </button>
     </div>
@@ -91,7 +97,8 @@ export default {
         locationProps: Object,
         copyForWhatsApiProps: Boolean,
         placesSavedProps: Boolean,
-        placesBlackListedProps: Boolean
+        placesBlackListedProps: Boolean,
+        openWhatsApiLinkProps: Boolean,
     },
     watch: {
         locationProps(value) {
@@ -99,7 +106,10 @@ export default {
         },
         copyForWhatsApiProps(value){
             this.copyForWhatsApi = value
-        }
+        },
+        openWhatsApiLinkProps(value){
+            this.openWhatsApiLink = value
+        },
     },
     mounted(){
         this.renderStars()
@@ -147,6 +157,10 @@ export default {
             if(this.location.saved) return true
             return false
         },
+        numberTreated(){
+            if(this.phone == '??') return '#'
+            return this.phone.replace(/[^\d]+/g, '')
+        }
     },
     data(){
         return {
@@ -155,9 +169,11 @@ export default {
             starsTransparents: [],
             halfStars: [],
             copyForWhatsApi: this.copyForWhatsApiProps,
+            openWhatsApiLink: this.openWhatsApiLinkProps,
             savedBtn: 'Saved',
             activedName: false,
             addBlackList: 'Black List',
+            blackListed: 'Black Listed',
             placesSaved: this.placesSavedProps,
             placesBlackListed: this.placesBlackListedProps,
             copied: false,
@@ -181,10 +197,8 @@ export default {
         },
         copyNumber(){
             if(this.phone == '??') return
-            let numberTreated = this.phone.replace(/[^\d]+/g, '')
-
-            if(this.copyForWhatsApi)  navigator.clipboard.writeText(`https://api.whatsapp.com/send?phone=${numberTreated}`)  
-            else navigator.clipboard.writeText(numberTreated)
+            if(this.copyForWhatsApi)  navigator.clipboard.writeText(`https://api.whatsapp.com/send?phone=${this.numberTreated}`)  
+            else navigator.clipboard.writeText(this.numberTreated)
                 
                 this.copied = true
                 
@@ -244,6 +258,7 @@ export default {
                 font-style: normal;
                 font-weight: bold;
                 line-height: normal;
+                cursor: pointer;
             }
             .actived-name {
                 color: #14FF00 !important;
@@ -305,6 +320,7 @@ export default {
                     line-height: normal;
                     cursor: pointer;
                     font-style: normal;
+                    text-decoration: none;
                 }
                 address {
                     font-style: normal;

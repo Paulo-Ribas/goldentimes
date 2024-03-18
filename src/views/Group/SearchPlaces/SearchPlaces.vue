@@ -17,11 +17,17 @@
       </form>
       <LoadingSmall v-if="searching"></LoadingSmall>
       <div class="cards-container" v-if="!searching">
-          <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial"
+          <LocationCard v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial" :openWhatsApiLinkProps="openWhatsApi"
           :placesSavedProps="false"
           @saveCard="savePlace($event)"
           />
       </div>
+      <div class="cards-container" v-if="!searching && mobile">
+        <LocationCardMobile v-for="(location, index) in locations" :key="index" :locationProps="location" :copyForWhatsApiProps="copySpecial" :openWhatsApiLinkProps="openWhatsApi"
+        :placesSavedProps="false"
+        @saveCard="savePlace($event)"
+        />
+    </div>
     </div>
   </template>
   
@@ -32,6 +38,7 @@
   import LocationCard from '@/components/LocationCard.vue'
   import axios from 'axios'
   import LoadingSmall from '@/components/LoadingSmall.vue'
+  import LocationCardMobile from '@/components/LocationCardMobile.vue'
   import { mapActions, mapMutations, mapState } from 'vuex'
   
   export default {
@@ -63,7 +70,7 @@
               filters: false,
               filtersList: [ { name: 'PhoneNumber', selected: false, apiFilter: 'phone' },
               {name:'Only Whats', selected: false, apiFilter:'onlyWhats'},
-              { name: 'Reviews', selected: false, googleFilter:'places.reviews' },
+              { name: 'Open WhatsApp Api Link', selected: false, apiFilter:'openWhatsApi' },
               { name: 'Facebook', selected: false, apiFilter: 'facebook'},
               { name: 'Copy WhatsApp Api Link', selected: false, apiFilter: 'copyOnlyWhats'},
               { name: 'Open Now', selected: false, apiFilter: 'openNow' },
@@ -72,6 +79,7 @@
               apiFiltersSelecteds:'',
               locations: [],
               copySpecial: undefined,
+              openWhatsApi: undefined,
               searching: false,
               err: '',
               categoryName: '',
@@ -87,7 +95,7 @@
       computed: {
           ...mapState({locationStore: state => state.categories.category, BlackListLocations: state => state.groups.CurrentGroupBlackListLocations})
       },
-      components:{SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall},
+      components:{SearchIcon, FiltersIcon, Filters, LocationCard, LoadingSmall, LocationCardMobile},
       methods: {
           ...mapActions({saveLocation:'saveLocationInCategory', getCategory: 'getCategory'}),
           ...mapMutations({SET_STATE: 'SET_CATEGORY_STATE'}),
@@ -105,12 +113,14 @@
                   }
                   return obj
               })
-              this.filtersList = newFiltersList
-              let found = this.filtersList.find(filter => {
-                  return filter.name === 'Copy WhatsApp Api Link' && filter.selected
-              })
-              found ? this.copySpecial = true : this.copySpecial = false
-              this.toggleFilter(filter)
+            this.filtersList = newFiltersList
+            let foundCopy = this.filtersList.find(filter => filter.name === 'Copy WhatsApp Api Link' && filter.selected )
+            let foundOpen = this.filtersList.find(filter => filter.name === 'Open WhatsApp Api Link' && filter.selected)
+
+            foundCopy ? this.copySpecial = true : this.copySpecial = false
+            foundOpen ? this.openWhatsApi = true : this.openWhatsApi = false
+            
+            this.toggleFilter(filter)
           },
           toggleFilter(filter){
               let filtersSelecteds = this.filtersList.filter(filter => {
@@ -128,15 +138,17 @@
               this.googleFiltersSelecteds = googleFiltersTreated.join(',')
               this.apiFiltersSelecteds = apiFiltersNamesTreated.join(',')
 
-              if(filter != 'Copy WhatsApp Api Link') this.search()
+              if(filter !== 'Copy WhatsApp Api Link' && filter !== 'Open WhatsApp Api Link') this.search()
           },
           simulateSubmit(){
               document.querySelector('input[type="submit"]').click()
           },
           search(){
-              this.searching = true
-              let url = this.apiFiltersSelecteds !== '' ? `https://33bits.tech/goldentimes/locations/${this.text}/places.nationalPhoneNumber,${this.googleFiltersSelecteds}/${this.apiFiltersSelecteds}` 
-              : `https://33bits.tech/goldentimes/locations/${this.text}/places.nationalPhoneNumber,${this.googleFiltersSelecteds}`
+            if(this.text === '' || this.text.search(/[a-z]/i) < 0 ) return
+
+            let url = this.apiFiltersSelecteds !== '' ? `https://33bits.tech/goldentimes/locations/${this.text}/places.nationalPhoneNumber,${this.googleFiltersSelecteds}/${this.apiFiltersSelecteds}` 
+            : `https://33bits.tech/goldentimes/locations/${this.text}/places.nationalPhoneNumber,${this.googleFiltersSelecteds}`
+            this.searching = true
               axios.get(url)
               .then(response =>{
                   if(response.data.locations.error) return this.err = 'ocorreu um erro durante a pesquisa'
@@ -144,6 +156,7 @@
                   this.isLocationSaved(locations)
                   this.isLocationBlackListed(this.locations)
                   this.searching = false
+                  this.err = ''
               }).catch(err => {
                   //console.log(err)
                   this.err = err.response.data.err
@@ -287,11 +300,11 @@
       }
       .filters-enter-to {
           opacity: 1;
-          transform: translate(-50%, 100%);
+          transform: translate(-50%, 25%);
       }
       .filters-leave-from {
           opacity: 1;
-          transform: translate(-50%, 100%);
+          transform: translate(-50%, 25%);
   
       }
       .filters-leave-to {

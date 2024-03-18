@@ -64,6 +64,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
+        margin: 5px 6px 0px 0px;
         transition: 0.2s;
         &:hover {
           transform: translateY(-5px);
