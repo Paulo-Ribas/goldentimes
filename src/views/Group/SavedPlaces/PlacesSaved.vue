@@ -272,7 +272,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                   //console.log($event,'o eventou')
                   let {groupID, categoryID} = this
                   await this.deleteLocation({location: $event, groupID, categoryID})
-                  this.originalLocations--
+                  this.amountBlackListed--
                   this.isLocationSaved(this.locations)
                   this.isLocationBlackListed(this.locations)
               }
@@ -287,7 +287,7 @@ import LocationCardMobile from '@/components/LocationCardMobile.vue'
                 let blackListUpdated = await this.addLocationToGroupBlackList({location: $event, groupID})
                 //console.log(blackListUpdated, 'só vendo o que é o blacklistupdated')
                 this.SET_CURRENT_LOCATIONS_BLACK_LISTED(blackListUpdated)
-                this.originalLocations--
+                this.amountBlackListed--
                 this.isLocationSaved(this.locations)
                 this.isLocationBlackListed(this.locations)
                 
